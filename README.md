@@ -1,3 +1,3 @@
 # Justin's Dotfiles
 ---
-Collection of dotfiles
+Collection of dotfiles and fresh kubuntu install script
