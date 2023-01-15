@@ -1,0 +1,6 @@
+Default themes (Breeze Dark)
+Force Blur kwin script
+Anydesk flatpak, joplin >> obsidion probably
+virtual-desktop-bar
+Nerd Fonts
+
