@@ -9,6 +9,13 @@
 #
 # Please see https://i3wm.org/docs/userguide.html for a complete reference!
 
+# Get Xresources		i3 name		X name		Backup
+set_from_resource 		$fg 		fg 		#000
+set_from_resource 		$bg 		bg 		#fff
+set_from_resource 		$accent 	accent 		#fff
+set_from_resource 		$border 	border 		#ccc
+
+
 set $mod Mod1
 
 # Font for window titles. Will also be used by the bar unless a different font
@@ -17,7 +24,8 @@ font pango:monospace 8
 
 gaps inner 10
 gaps outer 10
-default_border pixel 0
+gaps top 40
+default_border pixel 1
 default_floating_border pixel 0
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
@@ -180,8 +188,21 @@ mode "resize" {
         bindsym $mod+r mode "default"
 }
 
+bindsym $mod+Control+l workspace next
+bindsym $mod+Control+h workspace prev 
+bindsym $mod+Tab workspace back_and_forth
+
 bindsym $mod+r mode "resize"
+
+# class                 border  backgr. text    indicator child_border                                                                     
+client.focused_inactive #0d1010 #212121 #d9d9d9 #0d1010 #063340                                                                            
+client.unfocused        #0d1010 #212121 #d9d9d9 #424242 #063340                                                                            
+client.focused          #d9d9d9 #cecece #000000 #d9d9d9 #d9d9d9   
+
+client.background       #ffffff
+
 
 exec --no-startup-id nitrogen --restore
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
+exec_always --no-startup-id picom -b
 

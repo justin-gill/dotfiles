@@ -3,8 +3,8 @@
 # terminate already runing bar instances
 polybar-msg cmd quit
 
-# launch example bar
+# launch main bar
 echo "---" | tee -a /tmp/polybar.log
-polybar example 2>&1 | tee -a /tmp/polybar.log & disown
+polybar main 2>&1 | tee -a /tmp/polybar.log & disown
 
 echo "Bars launched..."
