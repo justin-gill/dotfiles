@@ -182,6 +182,7 @@ client.focused #8caaee #8caaee #8caaee #99d1db
 gaps inner 10
 default_border pixel 2
 default_floating_border pixel
+for_window [app_id="nm-connection-editor"] floating enable
 #  - /etc/sway/config.d
 #  - $XDG_CONFIG_HOME/sway/config.d ($HOME/.config/sway/config.d)
 #
