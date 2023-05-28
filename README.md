@@ -27,5 +27,5 @@ Make sure you don't already have a ~/.cfg directory
 [Sway Docs](https://github.com/swaywm/sway/wiki)
 
 ## Other dotfiles
-    * [Arch Linux i3](https://github.com/justin-gill/dotfiles/tree/arch-i3)
+[Arch Linux i3](https://github.com/justin-gill/dotfiles/tree/arch-i3)
 
