@@ -5,6 +5,8 @@ Dotfiles are stored in a bare git repository as outlined [here](https://www.atla
 
 This is a work in progress and will never be complete
 
+![desktop](https://github.com/justin-gill/dotfiles/assets/47087703/c48ceeab-78f5-43d5-a6de-bf18ff0f130b)
+
 ## Installation
 
 ### Fedora Essentials
