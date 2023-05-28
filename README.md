@@ -17,11 +17,11 @@ __If you are on a fresh install, update and restart__
 max_parallel_downloads=10
 defaultyes=True
 ```
-1. Run this _very safe_ command
+2. Run this _very safe_ command
 ```
 curl -Ls https://raw.githubusercontent.com/justin-gill/dotfiles/remote_scripts/fedora-sway/install.sh | sudo /bin/bash
 ```
-1. Configure git ([SSH](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent))
+3. Configure git ([SSH](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent))
 ```
 ssh-keygen -t ed25519 -C "your_email@example.com"
 eval "$(ssh-agent -s)"
@@ -45,7 +45,7 @@ git clone --depth 1 https://github.com/wbthomason/packer.nvim\
 ```
 1. Source ~/.config/nvim/lua/any/packer.lua `:so`
     * You are going to see a lot of errors when you first open neovim. Don't fret! Source packer.lua and reload
-1. Run PackerSync
+2. Run PackerSync
 
 ## Resources
 [Sway Docs](https://github.com/swaywm/sway/wiki)
