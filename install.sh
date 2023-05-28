@@ -18,3 +18,16 @@ dnf config-manager --add-repo https://brave-browser-rpm-release.s3.brave.com/bra
 rpm --import https://brave-browser-rpm-release.s3.brave.com/brave-core.asc
 dnf install brave-browser
 
+# grim dependencies
+# some of these may be unneccessary
+dnf install meson ninja-build pixman libpng libjpeg cmake cairo-devel wayland-protocols-devel
+# grim
+git clone --depth 1 https://github.com/emersion/grim.git
+cd grim
+meson build
+ninja -C build
+install -m 755 build/grim /usr/local/bin
+cd ..
+### THE DANGER ZONE ###
+rm -rf grim/
+
