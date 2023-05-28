@@ -43,7 +43,7 @@ Make sure to reload the config files with mod+shift+c
 git clone --depth 1 https://github.com/wbthomason/packer.nvim\
  ~/.local/share/nvim/site/pack/packer/start/packer.nvim
 ```
-1. Source ~/.config/nvim/lua/any/packer.lua `:so`
+2. Source ~/.config/nvim/lua/any/packer.lua `:so`
     * You are going to see a lot of errors when you first open neovim. Don't fret! Source packer.lua and reload
 2. Run PackerSync
 
