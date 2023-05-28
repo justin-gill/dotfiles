@@ -31,12 +31,8 @@ window#waybar {
   color: @blue;
 }
 
-#temperature {
-  color: @maroon;
-}
-
 #cpu {
-  color: @sky;
+  color: @maroon;
 }
 
 #battery {

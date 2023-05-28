@@ -3,7 +3,7 @@
     "spacing": 5, // Gaps between modules (4px)
     "modules-left": ["sway/workspaces", "sway/mode", "sway/scratchpad"],
     "modules-center": ["clock"],
-    "modules-right": ["cpu", "temperature", "network", "battery"],
+    "modules-right": ["cpu", "network", "battery"],
     "sway/mode": {
         "format": "<span style=\"italic\">{}</span>"
     },
@@ -22,14 +22,6 @@
     "cpu": {
         "format": "{usage}% ",
         "tooltip": false
-    },
-    "temperature": {
-        // "thermal-zone": 2,
-        // "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
-        "critical-threshold": 80,
-        // "format-critical": "{temperatureC}°C {icon}",
-        "format": "{temperatureC}°C {icon}",
-        "format-icons": ["", "", ""]
     },
     "battery": {
         "states": {
