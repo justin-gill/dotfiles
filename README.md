@@ -4,6 +4,7 @@ Welcome to my dotfiles!
 Dotfiles are stored in a bare git repository as outlined [here](https://www.atlassian.com/git/tutorials/dotfiles)
 
 This is a work in progress and will never be complete
+
 The main branch is used as a template
 
 ### Fedora Sway
