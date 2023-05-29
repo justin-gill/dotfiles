@@ -1,7 +1,7 @@
 #!/bin/sh
 dnf update -y
 # add flatpak
-dnf install neovim alacritty git tmux npm gcc gcc-c++ flatpak -y
+dnf install neovim alacritty git tmux npm gcc gcc-c++ flatpak NetworkManager-tui -y
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 # add rpm fusion
 dnf install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm -y
