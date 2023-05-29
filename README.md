@@ -20,7 +20,10 @@ The main branch is used as a template
 
 ## Resources & Helpful links
 [Sway Docs](https://github.com/swaywm/sway/wiki)
+
 [i3 Docs](https://i3wm.org/docs/)
+
 [packer](https://github.com/wbthomason/packer.nvim)
+
 [Catppuccin](https://github.com/catppuccin/catppuccin) for color themes
 
