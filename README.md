@@ -1,55 +1,25 @@
 # Dotfiles
-Collection of dotfiles for [Fedora Sway Spin](https://fedoraproject.org/spins/sway/)
+Welcome to my dotfiles!
 --- 
 Dotfiles are stored in a bare git repository as outlined [here](https://www.atlassian.com/git/tutorials/dotfiles)
 
 This is a work in progress and will never be complete
+The main branch is used as a template
 
+### Fedora Sway
+[Dotfiles](https://github.com/justin-gill/dotfiles/tree/fedora-sway)
 ![desktop](https://github.com/justin-gill/dotfiles/assets/47087703/c48ceeab-78f5-43d5-a6de-bf18ff0f130b)
 
-## Installation
+### Arch i3
+[Dotfiles](https://github.com/justin-gill/dotfiles/tree/arch-i3)
+![desktop](https://user-images.githubusercontent.com/47087703/224602442-b6cfb0fa-1968-488d-b263-1aabc64d30b6.png)
 
-__If you are on a fresh install, update and restart__
+### Ubuntu WSL
+[Dotfiles](https://github.com/justin-gill/dotfiles/tree/wsl-ubuntu)
 
-### Fedora Essentials
-1. Add the following to /etc/dnf/dnf.conf
-```
-max_parallel_downloads=10
-defaultyes=True
-```
-2. Run this _very safe_ command
-```
-curl -Ls https://raw.githubusercontent.com/justin-gill/dotfiles/remote_scripts/fedora-sway/install.sh | sudo /bin/bash
-```
-3. Configure git ([SSH](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent))
-```
-ssh-keygen -t ed25519 -C "your_email@example.com"
-eval "$(ssh-agent -s)"
-ssh-add ~/.ssh/id_ed25519
-git config --global user.email "your_email@example.com"
-git config --global user.name "Your Name"
-git config --global --add --bool push.autoSetupRemote true
-```
-
-### Dotfiles
-```
-curl -Ls https://raw.githubusercontent.com/justin-gill/dotfiles/remote_scripts/fedora-sway/cfg-install.sh | /bin/bash
-```
-Make sure to reload the config files with mod+shift+c
-
-### Neovim
-1. Install packer per [packer.nvim Quickstart](https://github.com/wbthomason/packer.nvim#quickstart)
-```
-git clone --depth 1 https://github.com/wbthomason/packer.nvim\
- ~/.local/share/nvim/site/pack/packer/start/packer.nvim
-```
-2. Source ~/.config/nvim/lua/any/packer.lua `:so`
-    * You are going to see a lot of errors when you first open neovim. Don't fret! Source packer.lua and reload
-2. Run PackerSync
-
-## Resources
+## Resources & Helpful links
 [Sway Docs](https://github.com/swaywm/sway/wiki)
-
-## Other dotfiles
-[Arch Linux i3](https://github.com/justin-gill/dotfiles/tree/arch-i3)
+[i3 Docs](https://i3wm.org/docs/)
+[packer](https://github.com/wbthomason/packer.nvim)
+[Catppuccin](https://github.com/catppuccin/catppuccin) for color themes
 
