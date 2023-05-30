@@ -1,4 +1,0 @@
-import:
-  - ~/.config/alacritty/theme/frappe.yml
-window:
-  opacity: 0.8 
