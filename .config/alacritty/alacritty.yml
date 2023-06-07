@@ -1,0 +1,4 @@
+import:
+  - ~/.config/alacritty/theme/mocha.yml
+window:
+  opacity: 0.90
