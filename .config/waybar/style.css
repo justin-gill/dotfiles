@@ -1,0 +1,70 @@
+@import "colors.css";
+
+* {
+    color: @text;
+}
+
+window#waybar {
+    background-color: transparent;
+}
+
+#clock,
+#custom-power,
+#battery,
+#cpu,
+#pulseaudio,
+#idle_inhibitor,
+#network {
+    padding: 0 10px;
+}
+
+
+#idle_inhibitor {
+    padding-left: 20px;
+}
+
+#custom-power {
+    padding-right: 20px;
+}
+
+#workspaces button:hover {
+    background: @blue;
+    border-radius: 16px;
+    border-color: @blue;
+    color: @base;
+}
+
+#workspaces button.current_output.focused label {
+    color: @blue;
+}
+
+#network {
+    color: @blue;
+}
+
+#idle_inhibitor {
+    color: @lavender;
+}
+
+#battery {
+    color: @green;
+}
+
+#custom-power {
+    color: @maroon;
+}
+
+#pulseaudio {
+    color: @teal;
+}
+
+.modules-right, .modules-center, .modules-left {
+    background-color: @base;
+    border-radius: 16px;
+    margin: 5px;
+}
+
+.modules-center {
+    padding:10;
+}
+

@@ -1,0 +1,40 @@
+# Colors
+color=282a36
+inside-color=1F202A
+line-color=1F202A
+ring-color=c6d0f5
+text-color=f8f8f2
+
+layout-bg-color=303446
+layout-text-color=f8f8f2
+
+inside-clear-color=e78284
+line-clear-color=1F202A
+ring-clear-color=e78284
+text-clear-color=1F202A
+
+inside-ver-color=8caaee
+line-ver-color=1F202A
+ring-ver-color=8caaee
+text-ver-color=1F202A
+
+inside-wrong-color=e78284
+line-wrong-color=1F202A
+ring-wrong-color=e78284
+text-wrong-color=1F202A
+
+bs-hl-color=e78284
+key-hl-color=a6d189
+
+text-caps-lock-color=f8f8f2
+
+# Size
+indicator-radius=200
+indicator-thickness=30
+
+# Flags
+daemonize
+ignore-empty-password
+indicator-caps-lock
+indicator-idle-visible
+
