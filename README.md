@@ -3,7 +3,7 @@ Collection of dotfiles for [Arch with i3](https://archlinux.org/)
 --- 
 Dotfiles are stored in a bare git repository as outlined [here](https://www.atlassian.com/git/tutorials/dotfiles)
 
-This is a work in progress and will never be complete
+This is a work in progress and will never be completed
 
 ![desktop](https://user-images.githubusercontent.com/47087703/224602442-b6cfb0fa-1968-488d-b263-1aabc64d30b6.png)
 
