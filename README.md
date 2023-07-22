@@ -3,7 +3,7 @@ Collection of dotfiles for [Fedora Sway Spin](https://fedoraproject.org/spins/sw
 --- 
 Dotfiles are stored in a bare git repository as outlined [here](https://www.atlassian.com/git/tutorials/dotfiles)
 
-This is a work in progress and will never be complete
+This is a work in progress and will never be completed
 
 ![desktop](https://user-images.githubusercontent.com/47087703/241812078-7c21c335-7229-4bec-b6ce-7afb2ff8e1a8.png)
 
