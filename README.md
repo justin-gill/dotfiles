@@ -21,15 +21,6 @@ defaultyes=True
 ```
 curl -Ls https://raw.githubusercontent.com/justin-gill/dotfiles/remote_scripts/fedora-sway/install.sh | sudo /bin/bash
 ```
-3. Configure git ([SSH](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent))
-```
-ssh-keygen -t ed25519 -C "your_email@example.com"
-eval "$(ssh-agent -s)"
-ssh-add ~/.ssh/id_ed25519
-git config --global user.email "your_email@example.com"
-git config --global user.name "Your Name"
-git config --global --add --bool push.autoSetupRemote true
-```
 
 ### Dotfiles
 ```
