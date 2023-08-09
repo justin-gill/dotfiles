@@ -35,8 +35,8 @@ return require('packer').startup(function(use)
     use {
         'kyazdani42/nvim-tree.lua',
         requires = 'kyazdani42/nvim-web-devicons',
+        config = function() require'nvim-tree'.setup() end
     }
-    require'nvim-tree'.setup {}
 
     use {
       'folke/which-key.nvim',
@@ -54,8 +54,18 @@ return require('packer').startup(function(use)
             require('Comment').setup()
         end
     }
+
+    use {
+        'lewis6991/gitsigns.nvim',
+        requires = { 'nvim-lua/plenary.nvim' },
+        config = function()
+            require('gitsigns').setup()
+        end
+    }
+
     use ('lervag/vimtex')
     use ('tpope/vim-fugitive')
+    use ('tpope/vim-commentary')
     use({
     'kylechui/nvim-surround',
     tag = '*', -- Use for stability; omit to use `main` branch for the latest features
