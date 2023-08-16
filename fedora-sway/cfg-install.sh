@@ -4,5 +4,5 @@ git clone --bare git@github.com:justin-gill/dotfiles.git $HOME/.cfg
 function config {
    /usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME $@
 }
-config checkout sway-fedora
+config checkout -f sway-fedora
 config config status.showUntrackedFiles no
