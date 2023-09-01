@@ -7,8 +7,8 @@ vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
 
 vim.opt.hlsearch = true
+vim.opt.wildmenu = true
 vim.opt.incsearch = true
 
 vim.opt.updatetime = 50
 vim.opt.clipboard:append("unnamedplus")
-

@@ -1,4 +1,3 @@
-#  https://github.com/catppuccin/catppuccin
 colors:
     primary:
         background: "#1E1E2E" # base
@@ -77,3 +76,4 @@ colors:
     indexed_colors:
         - { index: 16, color: "#FAB387" }
         - { index: 17, color: "#F5E0DC" }
+

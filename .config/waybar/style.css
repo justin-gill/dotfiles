@@ -35,7 +35,7 @@ window#waybar {
 }
 
 #workspaces button.current_output.focused label {
-    color: @blue;
+    color: @maroon;
 }
 
 #network {
@@ -56,6 +56,15 @@ window#waybar {
 
 #pulseaudio {
     color: @teal;
+}
+
+#tray > .passive {
+    -gtk-icon-effect: dim;
+}
+
+#tray > .needs-attention {
+    -gtk-icon-effect: highlight;
+    background-color: #eb4d4b;
 }
 
 .modules-right, .modules-center, .modules-left {

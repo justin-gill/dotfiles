@@ -3,7 +3,7 @@
         "spacing": 5, // Gaps between modules (4px)
         "modules-left": ["sway/workspaces", "sway/mode", "sway/scratchpad"],
         "modules-center": ["clock"],
-        "modules-right": ["idle_inhibitor","network", "pulseaudio", "battery", "custom/power"],
+        "modules-right": ["idle_inhibitor", "network", "pulseaudio", "battery", "custom/power"],
         "sway/mode": {
             "format": "<span style=\"italic\">{}</span>"
         },
@@ -39,7 +39,8 @@
             "format-icons": {
                 "activated": "",
                 "deactivated": ""
-            }
+            },
+            "start-activated": true
         },
         "battery": {
             "states": {
@@ -68,6 +69,10 @@
         "custom/power": {
             "format": "",
             "on-click": "wlogout"
-        }
+        },
+        "tray":{
+            "icon-size":18,
+            "spacing": 10
+        },
 }
 
