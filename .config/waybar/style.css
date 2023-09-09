@@ -1,7 +1,7 @@
 @import "colors.css";
 
 * {
-    color: @text;
+    color: @text
 }
 
 window#waybar {
@@ -34,8 +34,12 @@ window#waybar {
     color: @base;
 }
 
-#workspaces button.current_output.focused label {
-    color: @maroon;
+#workspaces button.active {
+    background: @blue;
+    border-radius: 16px;
+    border-color: @blue;
+    color: @base;
+    
 }
 
 #network {
