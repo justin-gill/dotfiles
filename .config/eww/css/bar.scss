@@ -1,0 +1,122 @@
+@use 'animations';
+@use 'colors';
+
+.w_bar {
+    margin: 10px { bottom: 0px }
+
+    .launcher {
+        border-radius: 10px;
+        background-color: colors.$background;
+        .widget {
+            padding-left: 14px;
+            padding-right: 14px;
+        }
+        transition: background-color 0.3s linear;
+    }
+    .launcher:hover {
+        background-color: colors.$background2;
+    }
+    .player {
+        border-radius: 10px;
+        background-color: colors.$background;
+        .widget {
+            padding-left: 14px;
+            padding-right: 14px;
+        }
+        transition: background-color 0.3s linear;
+    }
+    .player:hover {
+        background-color: colors.$background2;
+    }
+    .datetime {
+        border-radius: 10px;
+        background-color: colors.$background;
+        .widget {
+            padding-left: 14px;
+            padding-right: 14px;
+        }
+        transition: background-color 0.3s linear;
+    }
+    .datetime:hover {
+        background-color: colors.$background2;
+    }
+    .info {
+        border-radius: 10px;
+        background-color: colors.$background;
+        .widget {
+            padding-left: 14px;
+            padding-right: 14px;
+        }
+        transition: background-color 0.3s linear;
+    }
+    .info:hover {
+        background-color: colors.$background2;
+    }
+    .workspaces {
+        .active label {
+            color: colors.$background2;
+        }
+        border-radius: 10px;
+        background-color: colors.$background;
+
+        .widget {
+            padding-left: 14px;
+            padding-right: 14px;
+        }
+        transition: background-color 0.3s linear;
+        .inactive:hover label{
+            color: colors.$background2;
+        }
+    }
+
+    .launcher .image {
+        background: {
+            image: url("/home/any/.config/eww/images/launcher.png");
+            size: 16px 16px;
+            repeat: no-repeat;
+            position: center;
+        }
+    }
+}
+
+.w_player {
+
+    .layout-box {
+        margin: 20px;
+        background-color: colors.$background;
+        border-radius: 10px;
+
+        .left {
+            border-radius: 10px;
+            background-color: colors.$background;
+
+            .image {
+                border-radius: 10px;
+            }
+
+            .controls {
+                padding: 10px;
+            }
+        }
+
+        .right {
+            padding: 10px;
+            padding-right: 40px;
+
+            .duration {
+                font-size: 1em;
+            }
+
+            .title {
+                font-size: 2.5em;
+                font-weight: bolder;
+            }
+
+            .artist {
+                font-size: 1.5em;
+                font-weight: bold;
+            }
+        }
+    }
+}
+

@@ -1,0 +1,154 @@
+;; REVEAL BOOLEANS
+(defvar r_bar_launcher false)
+
+(defwindow bar
+    :monitor 0
+    :stacking "fg"
+    :exclusive true
+    :namespace "eww"
+
+    :geometry (geometry :anchor "top center"
+                        :width "100%"
+                        :height "4%")
+    (w_bar)
+)
+
+(defwidget w_bar_widget[class ?visible ?onleftclick ?onhover ?onhoverlost ?onclick ?spacing]
+    (eventbox :class class
+              :visible {visible ?: true}
+              :onhover onhover
+              :onhoverlost onhoverlost
+              :onclick onleftclick
+        (box :class "widget"
+             :spacing {spacing ?: 0}
+             :space-evenly {false}
+            (children)
+        )
+    )
+)
+
+(defwidget w_bar[]
+    (centerbox :class "w_bar"
+        (box :class "start"
+             :halign "start"
+             :spacing "10"
+             :space-evenly false
+            (w_bar_launcher)
+            (w_bar_workspaces :active {py_workspaces?.active ?: []} :current {py_workspaces?.current})
+        )
+        (box :class "middle"
+             :halign "center"
+             :spacing "10"
+            (w_bar_datetime)
+        )
+        (box :class "end"
+             :halign "end"
+             :spacing "10"
+            (w_bar_info)
+        )
+    )
+)
+
+(defwidget w_bar_launcher[]
+    (eventbox :class "launcher"
+              :onclick cmd_launcher
+              :onhover "eww update r_bar_launcher=true"
+              :onhoverlost "eww update r_bar_launcher=false"
+        (box :class "widget"
+             :spacing 0
+             :space-evenly {false}
+            (box :class "image"
+                 :width 16
+            )
+            (revealer :reveal r_bar_launcher
+                      :transition "slideleft"
+                (label :text "Launcher"
+                       :style "padding-left: 10px"
+                )
+            )
+        )
+    )
+)
+
+(defwidget w_bar_workspaces[active current]
+    (w_bar_widget :class "workspaces"
+        (box :spacing 20
+            (for workspace in {active}
+                (eventbox :class "${workspace.id == current ? "active" : "inactive"}"
+                          :width 24
+                          :onclick "hyprctl dispatch workspace ${workspace.id}"
+                    (label :text {workspace.glyph}))
+            )
+        )
+    )
+)
+
+
+(defwidget w_bar_datetime[]
+    (w_bar_widget :class "datetime"
+                  :spacing 10
+                  :space-evenly false
+                  :onleftclick "eww open --toggle calendar"
+        (eventbox :class "clock"
+            (box :space-evenly false
+                (label :text "${time?.smonth} ${time?.day}  |  ${time?.hour}:${time?.minute} ${time?.period}")
+            )
+        )
+    )
+)
+
+
+(defwidget w_bar_info[]
+    (w_bar_widget :class "info"
+                  :spacing 10
+                  :space-evenly false
+        (eventbox :class "battery ${EWW_BATTERY.BAT1.status}"
+                  :onscroll "[ {} == 'up' ] && (${cmd_brightness_increase}) || (${cmd_brightness_decrease})"
+                  :tooltip battery_time
+            (box :space-evenly false
+                 :spacing 2
+                (label :text
+                    "${EWW_BATTERY.BAT1.capacity >= 80 ? " " :
+                    "${EWW_BATTERY.BAT1.capacity >= 60 ? " " :
+                    "${EWW_BATTERY.BAT1.capacity >= 40 ? " " :
+                    "${EWW_BATTERY.BAT1.capacity >= 20 ? " " :
+                    " "}"}"}"}"
+                )
+            )
+        )
+        (eventbox :class "network ${network?.connectivity}"
+            (box :space-evenly false
+                (label :text
+                    "${network?.connectivity == "full" ?
+                        "${network?.type == "wifi" ?
+                            "${network_strength > 80 ? "󰤥 " :
+                            "${network_strength > 40 ? "󰤢 " :
+                            "${network_strength > 20 ? "󰤟 " :
+                            "󰤯 "}"}"}" :
+                        "󰤯 "}" :
+                    "${network?.connectivity == "limited" ?
+                        "${network?.type == "wifi" ?
+                            "${network_strength > 80 ? "󰤦 " :
+                            "${network_strength > 40 ? "󰤣 " :
+                            "${network_strength > 20 ? "󰤠 " :
+                            "󰤫 "}"}"}" :
+                        "󰤫 "}" :
+                    "󰤭 "}"}"
+                )
+            )
+        )
+        (eventbox
+            :onmiddleclick cmd_sink_mute
+            :onscroll "[ {} == 'up' ] && (${cmd_sink_volume_increase}) || (${cmd_sink_volume_decrease})"
+            (box :class "sink"
+                 :space-evenly false
+                (label :text "${audio == "null" || audio.sink[0].mute || audio.sink[0].volume == 0 ? "󰝟":
+                        "${audio.sink[0].port == "Headphones" ? " " :
+                        "${audio.sink[0].volume >= 50         ? " " :
+                        ""}"}"}")
+                (label :text "${audio?.sink?.[0]?.volume}%" :visible "${audio == "null" || !(audio?.sink[0].mute)}" :style "padding-left: 10px")
+            )
+        )
+    )
+)
+
