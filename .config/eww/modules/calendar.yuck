@@ -6,7 +6,7 @@
 )
 
 (defwidget w_datetime[]
-    (box :class "w_datetime"
+    (box :class "w_datetime flyin-top"
         (w_page_time)))
 
 (defwidget w_page_time[]

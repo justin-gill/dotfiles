@@ -14,19 +14,7 @@
         transition: background-color 0.3s linear;
     }
     .launcher:hover {
-        background-color: colors.$background2;
-    }
-    .player {
-        border-radius: 10px;
-        background-color: colors.$background;
-        .widget {
-            padding-left: 14px;
-            padding-right: 14px;
-        }
-        transition: background-color 0.3s linear;
-    }
-    .player:hover {
-        background-color: colors.$background2;
+        background-color: colors.$color1;
     }
     .datetime {
         border-radius: 10px;
@@ -38,7 +26,7 @@
         transition: background-color 0.3s linear;
     }
     .datetime:hover {
-        background-color: colors.$background2;
+        background-color: colors.$color1;
     }
     .info {
         border-radius: 10px;
@@ -50,11 +38,11 @@
         transition: background-color 0.3s linear;
     }
     .info:hover {
-        background-color: colors.$background2;
+        background-color: colors.$color1;
     }
     .workspaces {
         .active label {
-            color: colors.$background2;
+            color: colors.$color1;
         }
         border-radius: 10px;
         background-color: colors.$background;
@@ -65,7 +53,7 @@
         }
         transition: background-color 0.3s linear;
         .inactive:hover label{
-            color: colors.$background2;
+            color: colors.$color1;
         }
     }
 
@@ -79,44 +67,38 @@
     }
 }
 
-.w_player {
-
-    .layout-box {
-        margin: 20px;
+.w_datetime {
+    .time {
         background-color: colors.$background;
-        border-radius: 10px;
+        margin: 25px;
+        border: 2px solid colors.$color1;
+        border-radius: 20px;
 
-        .left {
-            border-radius: 10px;
-            background-color: colors.$background;
-
-            .image {
-                border-radius: 10px;
-            }
-
-            .controls {
-                padding: 10px;
-            }
+        .clock {
+            font-size: 2em;
+            font-weight: bolder;
+            padding: 5px;
         }
 
-        .right {
-            padding: 10px;
-            padding-right: 40px;
+    }
+    calendar {
+        padding: 10px;
+        color: colors.$text;
+        font-weight: bold;
 
-            .duration {
-                font-size: 1em;
-            }
+        &:hover {
+            color: white;
+        }
 
-            .title {
-                font-size: 2.5em;
-                font-weight: bolder;
-            }
+        &:selected {
+            color: white;
+            font-weight: bolder;
+        }
 
-            .artist {
-                font-size: 1.5em;
-                font-weight: bold;
-            }
+        &:indeterminate {
+            color: #888888;
         }
     }
 }
+
 
