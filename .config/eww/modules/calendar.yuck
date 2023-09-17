@@ -2,14 +2,16 @@
                   :stacking "fg"
                   :namespace "eww_overlay"
                   :geometry (geometry :anchor "top center")
-    (w_datetime)
+    (bar_calendar)
 )
 
-(defwidget w_datetime[]
-    (box :class "w_datetime flyin-top"
-        (w_page_time)))
+(defwidget bar_calendar[]
+    (box :class "bar_calendar flyin-top"
+        (page_time)
+    )
+)
 
-(defwidget w_page_time[]
+(defwidget page_time[]
     (box :space-evenly false
          :orientation "v"
          :class "time"
@@ -17,5 +19,7 @@
                :hexpand true
                :halign "center"
                :text "${time?.hour} : ${time?.minute} : ${time?.second}")
-            (calendar)))
+            (calendar)
+    )
+)
 

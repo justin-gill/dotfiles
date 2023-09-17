@@ -1,7 +1,8 @@
-;; REVEAL BOOLEANS
+;; Reveal Booleans 
 (defvar r_bar_launcher false)
 
-(defwindow bar
+;; Main Bar
+(defwindow bar 
     :monitor 0
     :stacking "fg"
     :exclusive true
@@ -10,10 +11,11 @@
     :geometry (geometry :anchor "top center"
                         :width "100%"
                         :height "4%")
-    (w_bar)
+    (top_bar)
 )
 
-(defwidget w_bar_widget[class ?visible ?onleftclick ?onhover ?onhoverlost ?onclick ?spacing]
+;; Template bar
+(defwidget bar_widget[class ?visible ?onleftclick ?onhover ?onhoverlost ?onclick ?spacing]
     (eventbox :class class
               :visible {visible ?: true}
               :onhover onhover
@@ -27,29 +29,31 @@
     )
 )
 
-(defwidget w_bar[]
-    (centerbox :class "w_bar"
+(defwidget top_bar[]
+    (centerbox :class "top_bar"
         (box :class "start"
              :halign "start"
              :spacing "10"
              :space-evenly false
-            (w_bar_launcher)
-            (w_bar_workspaces :active {py_workspaces?.active ?: []} :current {py_workspaces?.current})
+            (bar_launcher)
+            (bar_workspaces :active {py_workspaces?.active ?: []} :current {py_workspaces?.current})
         )
         (box :class "middle"
              :halign "center"
              :spacing "10"
-            (w_bar_datetime)
+            (bar_datetime)
         )
         (box :class "end"
              :halign "end"
              :spacing "10"
-            (w_bar_info)
+             :space-evenly false
+            (bar_info)
+            (bar_powermenu)
         )
     )
 )
 
-(defwidget w_bar_launcher[]
+(defwidget bar_launcher[]
     (eventbox :class "launcher"
               :onclick cmd_launcher
               :onhover "eww update r_bar_launcher=true"
@@ -70,8 +74,8 @@
     )
 )
 
-(defwidget w_bar_workspaces[active current]
-    (w_bar_widget :class "workspaces"
+(defwidget bar_workspaces[active current]
+    (bar_widget :class "workspaces"
         (box :spacing 20
             (for workspace in {active}
                 (eventbox :class "${workspace.id == current ? "active" : "inactive"}"
@@ -84,8 +88,8 @@
 )
 
 
-(defwidget w_bar_datetime[]
-    (w_bar_widget :class "datetime"
+(defwidget bar_datetime[]
+    (bar_widget :class "datetime"
                   :spacing 10
                   :space-evenly false
                   :onleftclick "eww open --toggle calendar"
@@ -98,8 +102,8 @@
 )
 
 
-(defwidget w_bar_info[]
-    (w_bar_widget :class "info"
+(defwidget bar_info[]
+    (bar_widget :class "info"
                   :spacing 10
                   :space-evenly false
         (eventbox :class "battery ${EWW_BATTERY.BAT1.status}"
@@ -143,11 +147,22 @@
             (box :class "sink"
                  :space-evenly false
                 (label :text "${audio == "null" || audio.sink[0].mute || audio.sink[0].volume == 0 ? "󰝟":
-                        "${audio.sink[0].port == "Headphones" ? " " :
-                        "${audio.sink[0].volume >= 50         ? " " :
-                        ""}"}"}")
+                        "${audio.sink[0].volume >= 60         ? "" :
+                        "${audio.sink[0].volume <= 60         ? "" :
+                        "󰝟"}"}"}")
                 (label :text "${audio?.sink?.[0]?.volume}%" :visible "${audio == "null" || !(audio?.sink[0].mute)}" :style "padding-left: 10px")
             )
+        )
+    )
+)
+
+(defwidget bar_powermenu[]
+    (eventbox :class "bar_powermenu"
+        (box :class "widget"
+             :width 40
+             :spacing 0
+             :space-evenly false
+            (label :text "")
         )
     )
 )

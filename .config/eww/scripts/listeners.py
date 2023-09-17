@@ -1,13 +1,11 @@
 #!/usr/bin/python3
 
+# Based heavily on https://github.com/abaan404/dotfiles
 import re
 import subprocess, sys, os
 import json, requests
 import time
-from dotenv import load_dotenv
 from pathlib import Path
-
-load_dotenv()
 
 def read_shell(command: list | str, shell: bool = False, ignore_error: bool = False, retry: bool = False, _attempts: int = 0, timeout: float | None = None) -> str:
 
@@ -95,174 +93,6 @@ class SignalListener(BaseListener):
     def read(self) -> dict | list:
         print(f"Invalid Operation, --listen must be provided for '{args.command}'", file=sys.stderr)
         return {}
-
-# caches at each interval, hence making it different from defpoll, useful for web requests
-class CachedIntervalListener(BaseListener):
-    def __init__(self, identifier: str, interval: int) -> None:
-        self.interval = interval
-        self.identifier = identifier
-        self.cache_path = Path("~/.dotfiles/data/cache.json").expanduser()
-
-        if not self.cache_path.exists():
-            self.cache_path.parent.mkdir(exist_ok=True)
-            with open(self.cache_path, "w") as fw: fw.write('{}')
-
-    def listen(self) -> None:
-        timestamp, cache = self.read_cache()
-        self.dispatch(cache)
-        while True:
-            time.sleep(1)
-            if timestamp < time.time():
-                timestamp, cache = self.write_cache()
-                self.dispatch(cache)
-
-    def write_cache(self) -> tuple[float, dict | list]:
-        with open(self.cache_path, "r") as fr:
-            try:
-                content = json.load(fr)
-            except json.decoder.JSONDecodeError:
-                content = {}
-
-        with open(self.cache_path, "w") as fw:
-            timestamp = time.time() + self.interval
-            cache = self.read()
-            content[self.identifier] = {
-                "timestamp": timestamp,
-                "cache": cache
-            }
-            json.dump(content, fw, indent=2)
-
-        return timestamp, cache
-
-    def read_cache(self) -> tuple[float, dict | list]:
-        with open(self.cache_path, "r") as f:
-            try:
-                data = json.load(f).get(self.identifier)
-            except json.decoder.JSONDecodeError:
-                data = {}
-
-        if data:
-            return data["timestamp"], data["cache"]
-        else:
-            return self.write_cache()
-
-class Weather(CachedIntervalListener):
-    def __init__(self) -> None:
-        super().__init__(identifier="weather", interval=3600)
-        self.location = args.location
-        self.api = os.getenv("OPENWEATHER_API_KEY")
-
-    def read(self) -> dict:
-        # https://openweathermap.org/api/geocoding-api
-        with requests.get(f"http://api.openweathermap.org/geo/1.0/direct?q={self.location}&limit=1&appid={self.api}") as r:
-            if r.status_code != 200 or not (data := r.json()):
-                print(f"could not find the location {self.location}", file=sys.stderr)
-                return {}
-            lat, lon = data[0]["lat"], data[0]["lon"]
-
-        # https://openweathermap.org/current
-        with requests.get(f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={self.api}") as r:
-            if r.status_code != 200:
-                print(f"Could not fetch weather info", file=sys.stderr)
-                return {}
-            data = r.json()
-
-        image = Path("~/.dotfiles/images/weather.png").expanduser()
-        with requests.get(f"https://openweathermap.org/img/wn/{data['weather'][0]['icon']}@2x.png") as r:
-            if r.status_code != 200:
-                print(f"Could not fetch weather image", file=sys.stderr)
-
-            with open(image, "wb") as f:
-                f.write(r.content)
-
-        return {
-            "location": data["name"],
-            "temperature": f'{data["main"]["temp"] - 273.15:.1f}°C',
-            "image": f'file://{image}',
-            "feelslike": f'{data["main"]["feels_like"] - 273.15:.1f}°C',
-            "description": data["weather"][0]["main"].capitalize(),
-            "windspeed": data["wind"]["speed"],
-            "visibility": data["visibility"]
-        }
-
-class Schedule(SignalListener):
-    def __init__(self) -> None:
-        super().__init__(interval=1)
-        self.registered.extend([
-            self.fetch,
-            self.add_event,
-            self.remove_event
-        ])
-        self.path = Path("~/.dotfiles/data/schedule.json").expanduser()
-        if not self.path.parent.exists() or not self.path.exists():
-            self.path.parent.mkdir(exist_ok=True)
-            with open(self.path, "w") as f:
-                json.dump(self.template(), f, indent=2)
-
-        with open(self.path, "r") as f:
-            self._schedule = json.load(f)
-
-    def write(self):
-        with open(self.path, "w") as f:
-            json.dump(self._schedule, f, indent=2)
-
-    def template(self) -> dict:
-        return {
-            "sunday": {},
-            "monday": {},
-            "tuesday": {},
-            "wednesday": {},
-            "thursday": {},
-            "friday": {},
-            "saturday": {},
-        }
-
-    @SignalListener.on_enable("s_schedule_fetch")
-    def fetch(self, week):
-        buff = []
-        for time, event in self._schedule[week.lower()].items():
-            buff.append({
-                "time": time,
-                "event": event
-            })
-
-        self.dispatch(sorted(buff, key=lambda x: x["time"])) # yeah i know idc
-
-    @SignalListener.on_signal("s_schedule_add")
-    def add_event(self, _):
-        data = read_shell(["zenity", "--forms",
-                   "--add-entry=Event Title",
-                   "--add-entry=Event Time",
-                   "--add-list=Select Day", "--list-values=sunday|monday|tuesday|wednesday|thursday|friday|saturday"], ignore_error=True).split("|")
-
-        if len(data) != 3:
-            return
-        title, time, day = data
-
-        if not title:
-            read_shell(["notify-send", "No title specified"])
-            return
-
-        if not re.match("^(2[0-3]|(1|0)[0-9]):([0-5][0-9])$", time):
-            read_shell(["notify-send", "Invalid time"])
-            return
-
-        if not day:
-            read_shell(["notify-send", "No day specified"])
-            return
-
-        self._schedule[day][time] = title
-        self.write()
-
-    @SignalListener.on_signal("s_schedule_remove")
-    def remove_event(self, data):
-        data = json.loads(data)
-        try:
-            del self._schedule[data["day"].lower()][data["time"]]
-        except KeyError:
-            print(f"Could not delete schedule with the following data: {data}", file=sys.stderr)
-
-        self.write()
 
 class Wifi(SignalListener):
     def __init__(self) -> None:
@@ -372,70 +202,6 @@ class Network(BaseListener):
 
         return buff
 
-class Player(BaseListener):
-    def __init__(self) -> None:
-        super().__init__(["dbus-monitor"], ".+(\\/org\\/mpris\\/MediaPlayer2.+PropertiesChanged)")
-
-    def read(self) -> dict | list:
-        buff = {
-            "status": read_shell(["playerctl", "status"], ignore_error=True),
-            "alive": []
-        }
-        if not (players := [args.player] if args.player else read_shell(["playerctl", "--list-all"], ignore_error=True).split()):
-            return buff
-
-        for player in players:
-            data = read_shell(
-                ["playerctl", f"--player={player}", "metadata", "--format",
-                 "{{xesam:title}}:!:{{xesam:artist}}:!:{{xesam:album}}:!:{{xesam:url}}:!:{{mpris:artUrl}}:!:{{duration(mpris:length)}}"],
-                retry=True, ignore_error=True # idk why but it fails randomly woo
-            )
-
-            if not data:
-                return buff
-
-            title, artist, album, url, art_url, length = data.split(":!:")
-            buff["alive"].append({
-                "name": player,
-                "glyph": self.glyph(player),
-                "title": title,
-                "artist": artist,
-                "album": album,
-                "url": url,
-                "art_url": self.playerart(art_url) or f'file://{Path("~/.config/eww/images/playerart-default.png").expanduser()}',
-                "length": length
-            })
-
-        return buff
-
-    def playerart(self, url) -> str | None:
-        if not url:
-            return
-
-        if url.startswith("file://"):
-            return url
-
-        with requests.get(url) as r:
-            if r.status_code != 200:
-                print("Could not find playerart", file=sys.stderr)
-                return
-
-            path = Path("~/.dotfiles/images/playerart.png").expanduser()
-            with open(path, "wb") as f:
-                f.write(r.content)
-
-        return f"file://{path}"
-
-    def glyph(self, player: str) -> str:
-        if player.startswith("firefox"):
-            return ""
-        elif player.startswith("spotify"):
-            return ""
-        elif player.startswith("discord"):
-            return ""
-        else:
-            return ""
-
 class Audio(BaseListener):
     def __init__(self) -> None:
         super().__init__(["pactl", "subscribe"], ".+(sink|source|server)")
@@ -501,9 +267,6 @@ if __name__ == "__main__":
     network = subparser.add_parser("network")
     network.add_argument("-t", "--types", help="Select device type", nargs="+", default=[])
 
-    weather = subparser.add_parser("weather")
-    weather.add_argument("-l", "--location", help="The location to fetch data for", required=True)
-
     schedule = subparser.add_parser("schedule")
     workspaces = subparser.add_parser("workspaces")
     power = subparser.add_parser("power")
@@ -511,21 +274,14 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
     match args.command:
-        case "weather":
-            Weather().execute()
         case "audio":
             Audio().execute()
-        case "player":
-            Player().execute()
         case "network":
             Network().execute()
-        case "schedule":
-            Schedule().execute()
         case "workspaces":
             Workspaces().execute()
         case "power":
             Power().execute()
         case "wifi":
             Wifi().execute()
-        case _:
-            print("you dumbass", file=sys.stderr)
+

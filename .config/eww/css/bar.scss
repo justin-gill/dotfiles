@@ -1,10 +1,11 @@
 @use 'animations';
 @use 'colors';
 
-.w_bar {
+.top_bar {
     margin: 10px { bottom: 0px }
 
-    .launcher {
+    // Most widgets use the same base properties
+    .launcher, .datetime, .info, .workspaces, .bar_powermenu {
         border-radius: 10px;
         background-color: colors.$background;
         .widget {
@@ -13,50 +14,21 @@
         }
         transition: background-color 0.3s linear;
     }
-    .launcher:hover {
+    .launcher:hover, .datetime:hover, .info:hover, .bar_powermenu:hover {
         background-color: colors.$color1;
     }
-    .datetime {
-        border-radius: 10px;
-        background-color: colors.$background;
-        .widget {
-            padding-left: 14px;
-            padding-right: 14px;
-        }
-        transition: background-color 0.3s linear;
-    }
-    .datetime:hover {
-        background-color: colors.$color1;
-    }
-    .info {
-        border-radius: 10px;
-        background-color: colors.$background;
-        .widget {
-            padding-left: 14px;
-            padding-right: 14px;
-        }
-        transition: background-color 0.3s linear;
-    }
-    .info:hover {
-        background-color: colors.$color1;
-    }
+
+    // Workspace
     .workspaces {
         .active label {
             color: colors.$color1;
         }
-        border-radius: 10px;
-        background-color: colors.$background;
-
-        .widget {
-            padding-left: 14px;
-            padding-right: 14px;
-        }
-        transition: background-color 0.3s linear;
         .inactive:hover label{
             color: colors.$color1;
         }
     }
 
+    // Launcher
     .launcher .image {
         background: {
             image: url("/home/any/.config/eww/images/launcher.png");
@@ -67,38 +39,10 @@
     }
 }
 
-.w_datetime {
-    .time {
-        background-color: colors.$background;
-        margin: 25px;
-        border: 2px solid colors.$color1;
-        border-radius: 20px;
-
-        .clock {
-            font-size: 2em;
-            font-weight: bolder;
-            padding: 5px;
-        }
-
-    }
-    calendar {
-        padding: 10px;
-        color: colors.$text;
-        font-weight: bold;
-
-        &:hover {
-            color: white;
-        }
-
-        &:selected {
-            color: white;
-            font-weight: bolder;
-        }
-
-        &:indeterminate {
-            color: #888888;
-        }
-    }
+tooltip label {
+    background-color: colors.$background;
+    padding: 15px 15px;
+    border-radius: 20px;
+    border: 1px solid colors.$color1;
 }
-
 
