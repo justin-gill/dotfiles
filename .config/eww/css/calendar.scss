@@ -1,0 +1,37 @@
+@use 'animations';
+@use 'colors';
+
+// Calendar
+.bar_calendar{
+    .time {
+        background-color: colors.$background;
+        margin: 25px;
+        border: 2px solid colors.$color1;
+        border-radius: 20px;
+
+        .clock {
+            font-size: 2em;
+            font-weight: bolder;
+            padding: 5px;
+        }
+
+    }
+    calendar {
+        padding: 10px;
+        color: colors.$text;
+
+        &:hover {
+            color: white;
+        }
+
+        &:selected {
+            color: colors.$color5;
+            font-weight: bolder;
+        }
+
+        &:indeterminate {
+            color: #888888;
+        }
+    }
+}
+

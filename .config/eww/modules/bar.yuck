@@ -111,6 +111,7 @@
                   :tooltip battery_time
             (box :space-evenly false
                  :spacing 2
+                (label :text "${EWW_BATTERY.BAT1.capacity}% ")
                 (label :text
                     "${EWW_BATTERY.BAT1.capacity >= 80 ? " " :
                     "${EWW_BATTERY.BAT1.capacity >= 60 ? " " :
@@ -121,6 +122,7 @@
             )
         )
         (eventbox :class "network ${network?.connectivity}"
+                  :onclick "alacritty --class floating -e nmtui connect &"
             (box :space-evenly false
                 (label :text
                     "${network?.connectivity == "full" ?
@@ -158,6 +160,7 @@
 
 (defwidget bar_powermenu[]
     (eventbox :class "bar_powermenu"
+              :onclick wlogout_launcher
         (box :class "widget"
              :width 40
              :spacing 0

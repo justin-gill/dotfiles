@@ -1,5 +1,6 @@
 ; Variables
 (defvar cmd_launcher "sleep 0.1s; pkill rofi || rofi -show drun &") ; sleep to fix bar :onclick bug
+(defvar wlogout_launcher "wlogout &")
 (defvar cmd_brightness_increase "brightnessctl set 1%+")
 (defvar cmd_brightness_decrease "brightnessctl set 1%-")
 (defvar cmd_sink_mute "pamixer -t")

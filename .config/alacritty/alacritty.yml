@@ -5,6 +5,7 @@ font:
     family: LiterationMono Nerd Font
 window:
   dynamic_padding: true
+  opacity: 0.75
   padding:
     y: 5
     x: 5
