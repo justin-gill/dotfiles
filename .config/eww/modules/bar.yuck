@@ -59,11 +59,10 @@
               :onhover "eww update r_bar_launcher=true"
               :onhoverlost "eww update r_bar_launcher=false"
         (box :class "widget"
+             :width 40
              :spacing 0
-             :space-evenly {false}
-            (box :class "image"
-                 :width 16
-            )
+             :space-evenly false
+            (label :class "launcher-glyph" :text "󰣇")
             (revealer :reveal r_bar_launcher
                       :transition "slideleft"
                 (label :text "Launcher"
@@ -73,6 +72,7 @@
         )
     )
 )
+
 
 (defwidget bar_workspaces[active current]
     (bar_widget :class "workspaces"
@@ -113,11 +113,12 @@
                  :spacing 2
                 (label :text "${EWW_BATTERY.BAT1.capacity}% ")
                 (label :text
+                    "${EWW_BATTERY.BAT1.status == "Charging" ? "󰂄" :
                     "${EWW_BATTERY.BAT1.capacity >= 80 ? " " :
                     "${EWW_BATTERY.BAT1.capacity >= 60 ? " " :
                     "${EWW_BATTERY.BAT1.capacity >= 40 ? " " :
                     "${EWW_BATTERY.BAT1.capacity >= 20 ? " " :
-                    " "}"}"}"}"
+                    " "}"}"}"}"}"
                 )
             )
         )
@@ -148,10 +149,11 @@
             :onscroll "[ {} == 'up' ] && (${cmd_sink_volume_increase}) || (${cmd_sink_volume_decrease})"
             (box :class "sink"
                  :space-evenly false
-                (label :text "${audio == "null" || audio.sink[0].mute || audio.sink[0].volume == 0 ? "󰝟":
-                        "${audio.sink[0].volume >= 60         ? "" :
-                        "${audio.sink[0].volume <= 60         ? "" :
-                        "󰝟"}"}"}")
+                (label :text "${audio == "null" || audio.sink[0].mute || audio.sink[0].volume == 0 ? "󰝟 ":
+                            "${audio.sink[0].volume >= 60         ? "" :
+                            "${audio.sink[0].volume <= 60         ? "" : 
+                            "󰝟"}"}"}"
+                )
                 (label :text "${audio?.sink?.[0]?.volume}%" :visible "${audio == "null" || !(audio?.sink[0].mute)}" :style "padding-left: 10px")
             )
         )

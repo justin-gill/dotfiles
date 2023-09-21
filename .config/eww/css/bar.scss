@@ -12,7 +12,7 @@
             padding-left: 14px;
             padding-right: 14px;
         }
-        transition: background-color 0.3s linear;
+        transition: background-color 0.1s linear;
     }
     .launcher:hover, .datetime:hover, .info:hover, .bar_powermenu:hover {
         background-color: colors.$color1;
@@ -27,15 +27,12 @@
             color: colors.$color1;
         }
     }
-
-    // Launcher
-    .launcher .image {
-        background: {
-            image: url("/home/any/.config/eww/images/launcher.png");
-            size: 16px 16px;
-            repeat: no-repeat;
-            position: center;
-        }
+    // launcher
+    .launcher-glyph {
+        color: colors.$color1;
+    }
+    .launcher:hover label{
+        color: white;
     }
 }
 

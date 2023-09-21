@@ -28,6 +28,7 @@ unset rc
 bind -x '"\C-f": tmux-sessionizer'
 alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 alias vim='nvim'
+alias obsidian='OBSIDIAN_USE_WAYLAND=1 obsidian -enable-features=UseOzonePlatform -ozone-platform=wayland'
 
 source /usr/share/nvm/init-nvm.sh
 . "$HOME/.cargo/env"
