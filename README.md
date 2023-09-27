@@ -13,7 +13,7 @@ pacman -S acpi alacritty brightnessctl dunst firefox git grim jq less neofetch n
 
 * AUR packages
 ```
-paru -S eww-git rofi-lbonn-wayland-git swww wlogout
+paru -S eww-git rofi-lbonn-wayland-git swww wlogout nwg-look
 ```
 
 * Flatpak
