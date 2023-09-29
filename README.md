@@ -22,6 +22,16 @@ flatpak install md.obsidian.Obsidian
 flatpak override --user --env=OBSIDIAN_USE_WAYLAND=1 md.obsidian.Obsidian
 ```
 
+* Config Install
+```
+git clone --bare git@github.com:justin-gill/dotfiles.git $HOME/.cfg
+function config {
+   /usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME $@
+}
+config checkout -f arch-hyprland
+config config status.showUntrackedFiles no
+```
+
 ### Neovim
 1. Install packer per [packer.nvim Quickstart](https://github.com/wbthomason/packer.nvim#quickstart)
 ```
