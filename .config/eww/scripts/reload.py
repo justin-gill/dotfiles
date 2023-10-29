@@ -30,7 +30,7 @@ if __name__ == "__main__":
     # selects random image from wallpaper folder
     wallpaper = pywal.image.get(CONFIG["wallpaper_folder"])
 
-    subprocess.Popen(["swww", "img", wallpaper, "--transition-type=wipe"])
+    subprocess.Popen(["swww", "img", wallpaper, "--transition-type=wipe", "--transition-fps=144"])
 
     # use pywal to get colors
     colors = pywal.colors.get(wallpaper)

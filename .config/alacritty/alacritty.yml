@@ -9,8 +9,6 @@ window:
   padding:
     y: 5
     x: 5
-env:
-  TERM: xterm-256
 shell:
   program: /bin/bash
 

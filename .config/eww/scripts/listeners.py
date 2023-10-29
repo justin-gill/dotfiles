@@ -208,7 +208,7 @@ class Audio(BaseListener):
 
     def read(self) -> dict | list:
         buff = {}
-        for output in ["source", "sink"]:
+        for output in ["sink"]:
             data = json.loads(read_shell(["pactl", "-f", "json", "list", f"{output}s"]))
 
             if isinstance(data, dict):

@@ -8,7 +8,7 @@ This is a work in progress and will never be completed
 ## Installation
 * pacman packages
 ```
-pacman -S acpi alacritty brightnessctl dunst firefox git grim jq less neofetch neovim networkmanager nodejs npm openssh pamixer pipewire python-dotenv python-pillow python-pip python-pywal qt5 ripgrep sddm slurp socat sof-firmware tmux vi vim wireplumber xdg-desktop-portal-wlr noto-fonts flatpak python-requests
+pacman -S acpi alacritty brightnessctl dunst firefox git grim jq less neofetch neovim networkmanager nodejs npm openssh pamixer pipewire python-dotenv python-pillow python-pip python-pywal qt5 ripgrep sddm slurp socat sof-firmware tmux vi vim wireplumber xdg-desktop-portal-wlr noto-fonts flatpak python-requests fzf
 ```
 
 * AUR packages

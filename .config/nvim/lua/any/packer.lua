@@ -32,6 +32,7 @@ return require('packer').startup(function(use)
         }
     }
 
+    use("windwp/nvim-ts-autotag")
     use('nvim-treesitter/nvim-treesitter', { run = ':TSUpdate' })
 
     use {
@@ -46,3 +47,4 @@ return require('packer').startup(function(use)
     use('tpope/vim-fugitive')
     use('tpope/vim-commentary')
 end)
+
