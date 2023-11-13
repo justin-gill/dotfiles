@@ -1,0 +1,87 @@
+{
+
+    "layer": "top",
+    "position": "top",
+    "height": 39,
+    "spacing": 4,
+    "margin": "5 15 0 15",
+    "modules-left": ["hyprland/workspaces"],
+    "modules-center": ["clock"],
+    "modules-right": ["network", "pulseaudio", "bluetooth", "battery", "custom/power"],
+    "hyprland/workspaces": {
+        "format": "{icon}",
+        "persistent-workspaces": {
+            "*": [ 1,2,3,4 ]
+        },
+        "format-icons": {
+             "1": "",
+             "2": "",
+             "3": "󰠮",
+             "4": "󰝚",
+             "5": "5",
+             "6": "6",
+             "7": "7",
+             "8": "8",
+             "9": "9",
+             "10": "10",
+        },
+    },
+    "bluetooth": {
+        "format": "",
+        "format-disabled": "󰂲",
+        "on-click": "rfkill toggle bluetooth",
+        "tooltip-format": "{status}"
+    },
+    "clock": {
+        "timezone": "America/Los_Angeles",
+        "format": "{:%b %d | %I:%M %p}",
+    },
+    "cpu": {
+        "format": "{usage}% ",
+        "tooltip": false
+    },
+    "pulseaudio": {
+        // "scroll-step": 1, // %, can be a float
+        "format": "{volume}% {icon}",
+        "format-muted": "Muted",
+        "format-source": "{volume}% ",
+        "format-source-muted": "",
+        "format-icons": {
+            "default": ["", "", ""]
+        },
+        "on-click": "pavucontrol"
+    },
+    "battery": {
+        "states": {
+            // "good": 95,
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "{capacity}% {icon}",
+        "format-charging": "{capacity}% ",
+        "format-alt": "{time} {icon}",
+        // "format-good": "", // An empty format will hide the module
+        // "format-full": "",
+        "format-icons": ["", "", "", "", ""]
+    },
+    "battery#bat2": {
+        "bat": "BAT2"
+    },
+    "network": {
+        // "interface": "wlp2*", // (Optional) To force the use of this interface
+        "format-wifi": "{icon}",
+        "format-disconnected": "Disconnected ⚠",
+        "format-icons": ["󰤥 ", "󰤢 ", "󰤟 "],
+
+        "on-click": "alacritty --class floating -e nmtui"
+    },
+    "custom/power": {
+        "format": "",
+        "on-click": "wlogout"
+    },
+    "tray":{
+        "icon-size":18,
+        "spacing": 10
+    },
+}
+
