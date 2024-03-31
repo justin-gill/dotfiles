@@ -66,5 +66,6 @@ return require('packer').startup(function(use)
     use('tpope/vim-commentary')
     use('wellle/context.vim')
     use('github/copilot.vim')
+    use('christoomey/vim-tmux-navigator')
 end)
 

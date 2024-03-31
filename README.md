@@ -9,7 +9,7 @@ Dotfiles are stored in a bare git repository as outlined [here](https://www.atla
 ## Installation
 * pacman packages
 ```
-pacman -S acpi alacritty breeze-gtk brightnessctl docker docker-compose dunst firefox flatpak fzf git grim gparted jq less man-db neofetch neovim networkmanager noto-fonts openssh pamixer pipewire polkit-kde-agent python-dotenv python-pillow python-pip python-pywal python-requests qt5 ripgrep rustup sddm slurp socat sof-firmware thunar tmux ttf-liberation-mono-nerd udiskie ufw vi vim waybar wireplumber wl-clipboard xdg-desktop-portal-wlr xorg-xhost
+pacman -S acpi alacritty breeze-gtk brightnessctl cmake docker docker-compose dunst firefox flatpak fzf git grim gparted hyprlock jq less man-db neofetch neovim networkmanager noto-fonts openssh pamixer pipewire polkit-kde-agent python-dotenv python-pillow python-pip python-pywal python-requests qt5 ripgrep rustup sddm slurp socat sof-firmware thunar tmux ttf-liberation-mono-nerd udiskie ufw vi vim waybar wireplumber wl-clipboard xdg-desktop-portal-wlr xorg-xhost
 ```
 
 * AUR packages

@@ -1,12 +1,9 @@
 #!/usr/bin/python3
 
-import subprocess, sys, os
+import subprocess
 import dotenv
-import requests
 import pywal
 
-from PIL import Image
-from string import Template
 from pathlib import Path
 
 dotenv.load_dotenv()
@@ -30,7 +27,7 @@ if __name__ == "__main__":
     # selects random image from wallpaper folder
     wallpaper = pywal.image.get(CONFIG["wallpaper_folder"])
 
-    subprocess.Popen(["swww", "img", wallpaper, "--transition-type=wipe", "--transition-fps=144"])
+    subprocess.Popen(["swww", "img", wallpaper, "--transition-type=wipe", "--transition-fps=40"])
 
     # Kill all instances of Waybar
     subprocess.run(['killall', 'waybar'])
