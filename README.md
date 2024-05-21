@@ -9,13 +9,13 @@ Dotfiles are stored in a bare git repository as outlined [here](https://www.atla
 ## Installation
 * pacman packages
 ```
-pacman -S acpi alacritty breeze-gtk brightnessctl cmake docker docker-compose dunst firefox flatpak fzf git grim gparted hyprlock jq less man-db neofetch neovim networkmanager noto-fonts openssh pamixer pipewire polkit-kde-agent python-dotenv python-pillow python-pip python-pywal python-requests qt5 ripgrep rustup sddm slurp socat sof-firmware thunar tmux ttf-liberation-mono-nerd udiskie ufw vi vim waybar wireplumber wl-clipboard xdg-desktop-portal-wlr xorg-xhost
+pacman -S acpi alacritty blueman bluez breeze-gtk brightnessctl btop cmake docker docker-compose dunst firefox flatpak fzf git gnome-disk-utility gparted grim hyprlock jq less man-db neovim networkmanager noto-fonts nwg-look openssh pavucontrol polkit-gnome python-dotenv python-pillow python-pip python-pywal qt5 qt5-quickcontrols ripgrep rofi-wayland rustup slurp thunar tmux ttf-liberation-mono-nerd udiskie ufw unzip waybar wl-clipboard
 ```
 
-* AUR packages
+* AUR packages ([paru install](https://github.com/Morganamilo/paru?tab=readme-ov-file#installation))
 ```
 rustup default stable
-paru -S nwg-look rofi-lbonn-wayland-git sddm-sugar-light swww wlogout-git
+paru -S swww wlogout-git mise
 ```
 
 * Flatpak
@@ -30,6 +30,9 @@ function config {
    /usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME $@
 }
 config config status.showUntrackedFiles no
+
+# sometimes you have to run
+config restore .
 ```
 
 ### Neovim
@@ -50,6 +53,11 @@ git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
 ```
 ufw enable
 ```
+```
+sudo systemctl enable bluetooth
+sudo systemctl start bluetooth
+```
+
 
 [Docker post-install](https://docs.docker.com/engine/install/linux-postinstall/)
 
