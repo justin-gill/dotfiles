@@ -35,6 +35,25 @@
     "clock": {
         "timezone": "America/Los_Angeles",
         "format": "{:%b %d | %I:%M %p}",
+        "tooltip-format": "<tt><small>{calendar}</small></tt>",
+        "smooth-scrolling-threshold": 5,
+        "calendar": {
+            "mode"          : "month",
+            "mode-mon-col"  : 3,
+            "on-scroll"     : 1,
+            "format": {
+                  "months":     "<span color='#B2B2B2'><b>{}</b></span>",
+                  "days":       "<span color='#B2B2B2'><b>{}</b></span>",
+                  "weeks":      "<span color='#B2B2B2'><b>W{}</b></span>",
+                  "weekdays":   "<span color='#B2B2B2'><b>{}</b></span>",
+                  "today":      "<span color='#ff6699'><b><u>{}</u></b></span>"
+                  }
+            },
+        "actions":  {
+            "on-click-right": "mode",
+            "on-scroll-up": "shift_up",
+            "on-scroll-down": "shift_down"
+        }
     },
     "cpu": {
         "format": "{usage}% ",
