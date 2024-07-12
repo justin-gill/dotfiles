@@ -21,6 +21,8 @@ require('mason-lspconfig').setup({
         'docker_compose_language_service',
         'jedi_language_server',
         'ruff_lsp',
+        'slint_lsp',
+        'gopls',
   },
     handlers = {
         lsp_zero.default_setup,
