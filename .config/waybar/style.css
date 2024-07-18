@@ -18,20 +18,19 @@ window#waybar {
     background-color: transparent;
 }
 
-#clock,
 #custom-power,
+#custom-tailscale,
 #battery,
 #cpu,
 #pulseaudio,
 #idle_inhibitor,
-#bluetooth,
-#network {
+#bluetooth {
     padding-right: 10px;
+    padding-left: 10px;
 }
 
 #custom-power {
     padding-right: 20px;
-    padding-left: 10px;
 }
 
 #network {
