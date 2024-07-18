@@ -1,0 +1,112 @@
+{
+
+    "layer": "top",
+    "position": "top",
+    "height": 39,
+    "spacing": 4,
+    "margin": "5 15 0 15",
+    "modules-left": ["hyprland/workspaces"],
+    "modules-center": ["clock"],
+    "modules-right": ["network", "custom/tailscale", "pulseaudio", "bluetooth", "battery", "custom/power"],
+    "hyprland/workspaces": {
+        "format": "{icon}",
+        "persistent-workspaces": {
+            "*": [ 1,2,3,4 ]
+        },
+        "format-icons": {
+             "1": "",
+             "2": "",
+             "3": "󰠮",
+             "4": "󰝚",
+             "5": "5",
+             "6": "6",
+             "7": "7",
+             "8": "8",
+             "9": "9",
+             "10": "10",
+        },
+    },
+    "bluetooth": {
+        "format": "",
+        "format-disabled": "󰂲",
+        "on-click": "rfkill toggle bluetooth",
+        "tooltip-format": "{status}"
+    },
+    "clock": {
+        "timezone": "America/Los_Angeles",
+        "format": "{:%b %d | %I:%M %p}",
+        "tooltip-format": "<tt><small>{calendar}</small></tt>",
+        "smooth-scrolling-threshold": 5,
+        "calendar": {
+            "mode"          : "month",
+            "mode-mon-col"  : 3,
+            "on-scroll"     : 1,
+            "format": {
+                  "months":     "<span color='#B2B2B2'><b>{}</b></span>",
+                  "days":       "<span color='#B2B2B2'><b>{}</b></span>",
+                  "weeks":      "<span color='#B2B2B2'><b>W{}</b></span>",
+                  "weekdays":   "<span color='#B2B2B2'><b>{}</b></span>",
+                  "today":      "<span color='#ff6699'><b><u>{}</u></b></span>"
+                  }
+            },
+        "actions":  {
+            "on-click-right": "mode",
+            "on-scroll-up": "shift_up",
+            "on-scroll-down": "shift_down"
+        }
+    },
+    "cpu": {
+        "format": "{usage}% ",
+        "tooltip": false
+    },
+    "pulseaudio": {
+        "scroll-step": 5,
+        "format": "{volume}% {icon}",
+        "format-muted": "Muted",
+        "format-source": "{volume}% ",
+        "format-source-muted": "",
+        "format-icons": {
+            "default": ["", "", ""]
+        },
+        "on-click": "pavucontrol"
+    },
+    "battery": {
+        "states": {
+            // "good": 95,
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "{capacity}% {icon}",
+        "format-charging": "{capacity}% ",
+        "format-alt": "{time} {icon}",
+        // "format-good": "", // An empty format will hide the module
+        // "format-full": "",
+        "format-icons": ["", "", "", "", ""]
+    },
+    "battery#bat2": {
+        "bat": "BAT2"
+    },
+    "network": {
+        // "interface": "wlp2*", // (Optional) To force the use of this interface
+        "format-wifi": "{essid} {icon}",
+        "format-disconnected": "Disconnected ⚠",
+        "format-icons": ["󰤥 ", "󰤢 ", "󰤟 "],
+
+        "on-click": "alacritty --class floating -e nmtui"
+    },
+    "custom/power": {
+        "format": "",
+        "on-click": "wlogout"
+    },
+    "custom/tailscale": {
+        "format": "{}",
+        "interval": 5,
+        "exec": "$HOME/.config/waybar/scripts/info-tailscale.sh",
+
+    },
+    "tray":{
+        "icon-size":18,
+        "spacing": 10
+    },
+}
+
