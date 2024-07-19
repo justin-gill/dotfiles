@@ -1,2 +1,6 @@
 [settings]
 python_compile = true
+
+[tools]
+node = '20'
+go = '1.22'
