@@ -23,6 +23,7 @@ require('mason-lspconfig').setup({
         'ruff_lsp',
         'slint_lsp',
         'gopls',
+        'ansiblels',
   },
     handlers = {
         lsp_zero.default_setup,

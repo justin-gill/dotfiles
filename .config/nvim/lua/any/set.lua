@@ -23,6 +23,8 @@ vim.opt.incsearch = true
 vim.opt.updatetime = 50
 vim.opt.clipboard:append("unnamedplus")
 
+vim.g.copilot_enabled = false
+
 if is_wsl() then
     vim.g.clipboard = {
         name = 'WslClipboard',

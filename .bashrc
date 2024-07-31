@@ -68,7 +68,7 @@ bind -x '"\C-f": tmux-sessionizer'
 alias vim='nvim'
 alias vi='nvim'
 
-export EDITOR='vi'
+export EDITOR='vim'
 export VISUAL='vi'
 
 eval "$(mise activate bash)"
