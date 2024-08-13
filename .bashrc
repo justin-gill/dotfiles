@@ -70,6 +70,8 @@ alias vi='nvim'
 
 export EDITOR='vim'
 export VISUAL='vi'
+export RANGER_LOAD_DEFAULT_RC="FALSE"
+export QT_STYLE_OVERRIDE=Adwaita-Dark
 
 eval "$(mise activate bash)"
 

@@ -9,7 +9,7 @@ Dotfiles are stored using GNU Stow [here](https://www.gnu.org/software/stow/)
 ## Installation
 * pacman packages
 ```
-pacman -S acpi alacritty bash-completion blueman bluez breeze-gtk brightnessctl btop cmake docker docker-compose dunst firefox flatpak fzf git gnome-disk-utility gparted grim hyprlock jq less man-db neovim networkmanager noto-fonts nwg-look openssh pavucontrol polkit-gnome python-dotenv python-pillow python-pip python-pywal qt5 qt5-quickcontrols ripgrep rofi-wayland rustup slurp stow thunar tmux ttf-liberation-mono-nerd udiskie ufw unzip waybar wl-clipboard
+pacman -S acpi alacritty bash-completion blueman bluez breeze-gtk brightnessctl btop cmake docker docker-compose dunst firefox flatpak fzf git gnome-disk-utility gparted grim hyprlock jq less man-db neovim networkmanager noto-fonts nwg-look openssh pavucontrol polkit-gnome python-dotenv python-pillow python-pip python-pywal qt5 qt5-quickcontrols ripgrep rofi-wayland rustup slurp stow thunar tmux ttf-liberation-mono-nerd udiskie ufw unzip waybar wl-clipboard adwaita-qt6 net-tools
 ```
 
 * AUR packages ([paru install](https://github.com/Morganamilo/paru?tab=readme-ov-file#installation))
