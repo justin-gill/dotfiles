@@ -68,8 +68,10 @@ bind -x '"\C-f": tmux-sessionizer'
 alias vim='nvim'
 alias vi='nvim'
 
-export EDITOR='vi'
+export EDITOR='vim'
 export VISUAL='vi'
+export RANGER_LOAD_DEFAULT_RC="FALSE"
+export QT_STYLE_OVERRIDE=Adwaita-Dark
 
 eval "$(mise activate bash)"
 
