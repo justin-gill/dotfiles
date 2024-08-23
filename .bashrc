@@ -67,6 +67,7 @@ unset rc
 bind -x '"\C-f": tmux-sessionizer'
 alias vim='nvim'
 alias vi='nvim'
+alias ta='tmux a'
 
 export EDITOR='vim'
 export VISUAL='vi'
