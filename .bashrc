@@ -1,10 +1,25 @@
 # .bashrc
 shopt -s histappend
 
-HISTSIZE=1000
-HISTFILESIZE=2000
+HISTSIZE=10000
+HISTFILESIZE=20000
 
-PS1="\[$(tput setaf 39)\]\u\[$(tput setaf 45)\]@\[$(tput setaf 51)\]\h \[$(tput setaf 195)\]\w \[$(tput sgr0)\]$ "
+LIGHT_BLUE="\[\e[38;5;153m\]"
+PEACH="\[\e[38;5;174m\]"
+LIGHT_GREEN="\[\e[38;5;151m\]"
+RESET="\[\e[0m\]"
+
+parse_git_branch() {
+  branch=$(git branch 2>/dev/null | grep -e '^\*' | sed 's/^\* //')
+
+  if [[ -n $(git status --porcelain 2>/dev/null) ]]; then
+    echo "$branch*"
+  else
+    echo "$branch"
+  fi
+}
+
+PS1="${LIGHT_GREEN}\h ${LIGHT_BLUE}\w${PEACH}\$([ -n \"\$(git branch 2>/dev/null)\" ] && echo \" \$(parse_git_branch)\") ${RESET}\$ "
 
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then

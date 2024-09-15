@@ -1,10 +1,24 @@
 #!/bin/bash
 # Thanks https://github.com/ThePrimeagen/.dotfiles!
+#
+additional_dirs=(
+    "$HOME/.dotfiles"
+)
+
+base_dirs=("$HOME/repos")
+
+all_dirs=()
+for base_dir in "${base_dirs[@]}"; do
+    mapfile -t dirs < <(find "$base_dir" -mindepth 1 -maxdepth 1 -type d)
+    all_dirs+=("${dirs[@]}")
+done
+
+all_dirs+=("${additional_dirs[@]}")
 
 if [[ $# -eq 1 ]]; then
     selected="$1"
 else
-    selected=$(find ~/repos/ -mindepth 1 -maxdepth 1 -type d | fzf)
+    selected=$(printf '%s\n' "${all_dirs[@]}" | fzf)
 fi
 
 if [[ -z $selected ]]; then
