@@ -89,5 +89,13 @@ export VISUAL='vi'
 export RANGER_LOAD_DEFAULT_RC="FALSE"
 export QT_STYLE_OVERRIDE=Adwaita-Dark
 
+function was() {
+    ~/.cargo/bin/wa-cli -s query "$*"
+}
+
+function wa() {
+    ~/.cargo/bin/wa-cli query "$*"
+}
+
 eval "$(mise activate bash)"
 
