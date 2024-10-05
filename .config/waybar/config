@@ -97,7 +97,7 @@
     },
     "custom/power": {
         "format": "",
-        "on-click": "wlogout"
+        "on-click": "$HOME/.config/rofi/bin/powermenu"
     },
     "custom/tailscale": {
         "format": "{}",
