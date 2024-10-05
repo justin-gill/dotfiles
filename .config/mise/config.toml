@@ -4,3 +4,4 @@ python_compile = true
 [tools]
 node = 'latest'
 go = 'latest'
+python = 'latest'

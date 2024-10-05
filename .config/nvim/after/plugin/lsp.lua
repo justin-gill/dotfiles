@@ -22,7 +22,6 @@ require('mason-lspconfig').setup({
         'jedi_language_server',
         'ruff_lsp',
         'slint_lsp',
-        'gopls',
         'ansiblels',
   },
     handlers = {
