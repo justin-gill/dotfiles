@@ -8,4 +8,4 @@ rofi \
 	-no-drun-show-actions \
 	-terminal foot \
 	-kb-cancel Escape,Control+bracketleft \
-	-theme "$HOME"/.config/rofi/config/launcher.rasi
+

@@ -9,4 +9,4 @@ configuration {
   }
 }
 
-@theme "rounded-blue-dark"
+@theme "tokyonight"

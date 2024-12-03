@@ -7,7 +7,7 @@
     "margin": "5 15 0 15",
     "modules-left": ["hyprland/workspaces"],
     "modules-center": ["clock"],
-    "modules-right": ["network", "custom/tailscale", "pulseaudio", "bluetooth", "battery", "custom/power"],
+    "modules-right": ["network", "custom/tailscale", "pulseaudio", "bluetooth", "battery", "tray", "custom/power"],
     "hyprland/workspaces": {
         "format": "{icon}",
         "persistent-workspaces": {
