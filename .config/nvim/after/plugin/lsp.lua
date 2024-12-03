@@ -10,7 +10,7 @@ end)
 require('mason').setup({})
 require('mason-lspconfig').setup({
     ensure_installed = {
-        'tsserver',
+        'ts_ls',
         'eslint',
         'rust_analyzer',
         'lua_ls',
@@ -22,7 +22,6 @@ require('mason-lspconfig').setup({
         'jedi_language_server',
         'ruff_lsp',
         'slint_lsp',
-        'gopls',
         'ansiblels',
   },
     handlers = {

@@ -13,7 +13,7 @@ return require('packer').startup(function(use)
 
     use {
         'VonHeikemen/lsp-zero.nvim',
-        branch = 'v3.x',
+        branch = 'v4.x',
         requires = {
             -- LSP Support
             { 'neovim/nvim-lspconfig' },   -- Required
@@ -47,27 +47,14 @@ return require('packer').startup(function(use)
     }
 
     use {
-      'jinh0/eyeliner.nvim',
-      config = function()
-        require'eyeliner'.setup {
-          highlight_on_key = true,
-          dim = false
-        }
-      end
-    }
-
-    use {
       'nvim-lualine/lualine.nvim',
       requires = { 'nvim-tree/nvim-web-devicons', opt = true }
     }
-
-    use('lervag/vimtex')
-    use('tpope/vim-fugitive')
     use('tpope/vim-commentary')
-    use('wellle/context.vim')
-    use('github/copilot.vim')
     use('christoomey/vim-tmux-navigator')
-    use('slint-ui/vim-slint')
+
+    use('github/copilot.vim') -- I do not like this
+
     use('fatih/vim-go')
 end)
 

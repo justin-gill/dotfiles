@@ -1,0 +1,140 @@
+/*
+ * Tokyonight colorscheme (big icons) for rofi
+ * User: w8ste
+ */
+
+
+// define colors etc.
+* {
+    font: "Monospace 11";
+    bg: rgba(36, 40, 59, 0.2);
+    hv: #9274ca; 
+    primary: #C5C8C6; 
+    ug: #0B2447;
+    kl: #7aa2f7;
+    transparent: rgba(255,255,255,0);
+    
+    background-color: @bg;
+    border: 0px;
+    border-color: @transparent;
+    text-color: white;
+
+}
+
+// defines different aspects of the window
+window {
+    width: 900;
+    orientation: horizontal;
+    location: center;
+    anchor: center;
+    transparency: "real";
+    spacing: 0;
+    children: [ mainbox ];
+    border: 1px;
+    border-color: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+}
+
+mainbox {
+    spacing: 0;
+    children: [ inputbar, message, listview ];
+}
+
+inputbar {
+    color: @kl;
+    padding: 11px;
+}
+
+message {
+    padding: 2;
+    border-color: @primary;
+}
+
+entry, prompt, case-indicator {
+    background-color: @transparent;
+    text-font: inherit;
+    text-color: inherit;
+    padding: 2px;
+}
+
+entry {
+    cursor: pointer;
+    blink: false;
+}
+
+prompt {
+    margin: 0px 5px 0px 0px;
+}
+
+listview {
+    layout: vertical;
+    padding: 8px;
+    lines: 6;
+    columns: 2;
+    border: 1px 0px 0px 0px; 
+    border-radius: 0px 0px 6px 6px;
+    border-color: @primary;
+    dynamic: false;
+}
+
+element {
+    margin: 2px;
+    padding: 10px;
+    vertical-align: 1;
+    color: @kl;
+    font: inherit;
+    border: 1px;
+    border-color: @transparent;
+    border-radius: 100 0 100 0;
+    background-color: @transparent;
+}
+
+element-text {
+    background-color: @transparent;
+    text-color: white;
+    vertical-align: 0.5;
+}
+
+element selected.normal {
+    background-color: @hv;
+    background-color: rgba(26, 27, 38, 0.7);
+    background-image: linear-gradient(45deg,rgba(51, 204, 255, 0.3), rgba(0, 255, 153, 0.3));
+    padding: 2em;
+    text-color: #000000;
+}
+
+element normal active {
+    background-color: @hv;
+    color: black;
+}
+
+element-icon {
+    background-color: @transparent;
+    text-color: inherit;
+    size: 1.5em;
+    margin: 0 10px 0 0;
+}
+
+element normal urgent {
+    background-color: @primary;
+}
+
+element selected active {
+    background: @hv;
+    foreground: @bg;
+}
+
+button {
+    padding: 10px;
+    color: @primary;
+    horizonatal-align: 0.5;
+
+    border: 2px 2px 2px 2px;
+    border-radius: 4px 0px 0px 4px;
+    border-color: @primary;
+}
+
+button selected normal {
+    border: 2px 2px 2px 2px;
+    border-color: @primary;
+}

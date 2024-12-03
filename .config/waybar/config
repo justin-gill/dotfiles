@@ -7,7 +7,7 @@
     "margin": "5 15 0 15",
     "modules-left": ["hyprland/workspaces"],
     "modules-center": ["clock"],
-    "modules-right": ["network", "custom/tailscale", "pulseaudio", "bluetooth", "battery", "custom/power"],
+    "modules-right": ["network", "custom/tailscale", "pulseaudio", "bluetooth", "battery", "tray", "custom/power"],
     "hyprland/workspaces": {
         "format": "{icon}",
         "persistent-workspaces": {
@@ -81,7 +81,8 @@
         "format-alt": "{time} {icon}",
         // "format-good": "", // An empty format will hide the module
         // "format-full": "",
-        "format-icons": ["", "", "", "", ""]
+        "format-icons": ["", "", "", "", ""],
+        "interval": 10
     },
     "battery#bat2": {
         "bat": "BAT2"
@@ -96,7 +97,7 @@
     },
     "custom/power": {
         "format": "",
-        "on-click": "wlogout"
+        "on-click": "$HOME/.config/rofi/bin/powermenu"
     },
     "custom/tailscale": {
         "format": "{}",
