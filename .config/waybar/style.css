@@ -15,7 +15,8 @@ button {
 }
 
 window#waybar {
-    background-color: transparent;
+    /* background-color: transparent; */
+    background-color: #1e1e1e;
 }
 
 #custom-power,
@@ -58,7 +59,7 @@ window#waybar {
 
 .modules-right, .modules-center, .modules-left {
     border-radius: 10px;
-    background-color: @background;
+    /* background-color: @background; */
     padding: 0px 15px;
 }
 

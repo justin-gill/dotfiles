@@ -4,7 +4,7 @@
     "position": "top",
     "height": 39,
     "spacing": 4,
-    "margin": "5 15 0 15",
+    //"margin": "5 15 0 15",
     "modules-left": ["hyprland/workspaces"],
     "modules-center": ["clock"],
     "modules-right": ["network", "custom/tailscale", "pulseaudio", "bluetooth", "battery", "tray", "custom/power"],
@@ -82,7 +82,7 @@
         // "format-good": "", // An empty format will hide the module
         // "format-full": "",
         "format-icons": ["", "", "", "", ""],
-        "interval": 10
+        "interval": 5
     },
     "battery#bat2": {
         "bat": "BAT2"
