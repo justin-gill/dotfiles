@@ -3,6 +3,7 @@
 #
 additional_dirs=(
     "$HOME/.dotfiles"
+    "$HOME"
 )
 
 base_dirs=("$HOME/repos")
