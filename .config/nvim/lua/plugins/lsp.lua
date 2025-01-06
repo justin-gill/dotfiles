@@ -30,6 +30,16 @@ return {
                            }
                        }
                    end,
+                    ['basedpyright'] = function ()
+                        local lspconfig = require("lspconfig")
+                        lspconfig.basedpyright.setup({
+                            settings = {
+                                basedpyright = {
+                                    typeCheckingMode = "off",
+                                },
+                            },
+                        })
+                    end
                 }
             })
         end,

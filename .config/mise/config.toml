@@ -1,3 +1,6 @@
+[tools]
+node = 'latest'
+
 [settings]
 python_compile = true
 
