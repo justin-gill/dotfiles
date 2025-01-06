@@ -6,22 +6,19 @@ set $down j
 set $up k
 set $right l
 
-exec --no-startup-id ~/.setup-ambassador-env.sh
-
 exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
 
 exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP
 exec hash dbus-update-activation-environment 2>/dev/null && \
      dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP
 
+exec swaybg -c '#FFFFFF'
+
 set $term alacritty
 
-set $menu rofi -terminal alacritty -show combi -modes combi -combi-modes "drun, run"
+set $menu sh $HOME/.config/rofi/bin/launcher
 
 include /etc/sway/config-vars.d/*
-
-# Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
-output * bg /usr/share/backgrounds/ubuntu-wallpaper-d.png fill
 
 ### Input configuration
 

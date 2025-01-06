@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 rofi \
-	-show drun \
-	-modi run,drun,ssh \
-	-scroll-method 0 \
+    -show combi \
+    -modes combi \
+    -combi-modes "drun,window,ssh" \
 	-drun-match-fields all \
 	-drun-display-format "{name}" \
 	-no-drun-show-actions \
-	-terminal foot \
+	-show-icons \
+	-terminal alacritty\
 	-kb-cancel Escape,Control+bracketleft \
+    -theme "$HOME"/.config/rofi/themes/cat-mocha.rasi
 
