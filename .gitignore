@@ -1,2 +1,4 @@
 .cfg
 .config/nvim/plugin
+.config/tmux/plugins
+.local/bin/mise
