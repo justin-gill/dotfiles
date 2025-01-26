@@ -16,10 +16,10 @@ fi
 status_mullvad=$(mullvad status | grep "Connected" | wc -l)
 
 # Determine Tailscale status
-if [ "$(echo ${status_tailscale} | jq --raw-output .BackendState)" = "Stopped" ]; then
-    tailscale_active=0
-else
+if [ "$(echo ${status_tailscale} | jq --raw-output .BackendState)" = "Running" ]; then
     tailscale_active=1
+else
+    tailscale_active=0
 fi
 
 # Determine Mullvad VPN status
