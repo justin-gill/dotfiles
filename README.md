@@ -27,6 +27,7 @@ sudo ufw enable
 * Various Services
 ```
 sudo systemctl enable bluetooth
+sudo systemctl enable sshd.service
 sudo systemctl enable sddm.service
 sudo systemctl enable tailscaled
 sudo tailscale set --operator=$USER 
