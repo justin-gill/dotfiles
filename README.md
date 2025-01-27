@@ -19,6 +19,7 @@ pacman -S --needed - < $HOME/.dotfiles/pkglist.txt
 ```
 flatpak install -y $(cat flatpaks.txt)
 ```
+
 ### Misc
 * Firewall
 ```
