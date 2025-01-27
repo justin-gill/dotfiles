@@ -1,6 +1,13 @@
 # .bashrc
 shopt -s histappend
 
+if ! pgrep -u "$USER" ssh-agent > /dev/null; then
+    ssh-agent -t 1h > "$XDG_RUNTIME_DIR/ssh-agent.env"
+fi
+if [[ ! -f "$SSH_AUTH_SOCK" ]]; then
+    source "$XDG_RUNTIME_DIR/ssh-agent.env" >/dev/null
+fi
+
 HISTSIZE=10000
 HISTFILESIZE=20000
 
@@ -19,7 +26,7 @@ parse_git_branch() {
   fi
 }
 
-PS1="${LIGHT_GREEN}\h ${LIGHT_BLUE}\w${PEACH}\$([ -n \"\$(git branch 2>/dev/null)\" ] && echo \" \$(parse_git_branch)\") ${RESET}\$ "
+PS1="${LIGHT_GREEN}\u@${LIGHT_GREEN}\h ${LIGHT_BLUE}\w${PEACH}\$([ -n \"\$(git branch 2>/dev/null)\" ] && echo \" \$(parse_git_branch)\") ${RESET}\$ "
 
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
@@ -85,8 +92,7 @@ alias vi='nvim'
 alias ta='tmux a'
 
 export EDITOR='vim'
-export VISUAL='vi'
-export RANGER_LOAD_DEFAULT_RC="FALSE"
+export VISUAL='vim'
 export QT_STYLE_OVERRIDE=Adwaita-Dark
 
 function was() {

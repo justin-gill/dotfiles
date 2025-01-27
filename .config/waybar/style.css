@@ -1,5 +1,3 @@
-@import "colors.css";
-
 label {
     all: unset;
 }
@@ -15,7 +13,6 @@ button {
 }
 
 window#waybar {
-    /* background-color: transparent; */
     background-color: #1e1e1e;
 }
 
@@ -49,17 +46,8 @@ window#waybar {
   padding: 10px;
 }
 
-#workspaces button:hover label {
-    color: @color3;
-}
-
-#workspaces button.active label {
-    color: @color3;
-}
-
 .modules-right, .modules-center, .modules-left {
     border-radius: 10px;
-    /* background-color: @background; */
     padding: 0px 15px;
 }
 
