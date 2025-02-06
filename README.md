@@ -70,5 +70,5 @@ sudo update-alternatives --config x-terminal-emulator
 
 Ensure Literation Mono font is installed before syncing with dconf
 ```bash
-dconf load / < $HOME/.dotfiles/ubuntu_config.txt
+dconf load / < $HOME/.dotfiles/ubuntu-config.txt
 ```
