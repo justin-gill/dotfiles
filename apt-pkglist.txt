@@ -1,0 +1,9 @@
+gnome-tweaks
+alacritty
+tmux
+stow
+fzf
+ripgrep
+gcc
+cmake
+build-essential
