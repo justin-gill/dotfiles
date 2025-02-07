@@ -58,6 +58,12 @@ xargs sudo apt-get -y install < $HOME/.dotfiles/apt-pkglist.txt
 # Neovim stable ppa is too far behind, unstable to too far ahead
 # too lazy to build from source, and this works fine imo
 sudo snap install nvim --classic
+
+# Go isn't necessary, but it is enabled by default in Neovim LSP conf
+# Mason-lspconfig will complain if go is not installed
+sudo snap install --classic go
+# in a similar vein
+mise install # for global node (also prereq for some lsps)
 ```
 
 * For Alacritty, you may need to downgrade the config toml file

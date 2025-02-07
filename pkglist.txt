@@ -16,6 +16,7 @@ flatpak
 fzf
 git
 gnome-themes-extra
+go
 grim
 hyprland
 hyprlock

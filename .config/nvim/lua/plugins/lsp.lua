@@ -13,9 +13,9 @@ return {
                     'lua_ls', -- lua
                     'dockerls', -- docker
                     'docker_compose_language_service', -- docker compose
+                    'gopls', -- go
                     'terraformls', -- terraform
                     -- 'csharp_ls', -- csharp
-                    -- 'gopls', -- go
                 },
                 handlers = {
                     function(server_name)
