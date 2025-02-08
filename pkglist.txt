@@ -27,6 +27,7 @@ neovim
 networkmanager
 nfs-utils
 noto-fonts
+noto-fonts-emoji
 nwg-look
 openssh
 pavucontrol

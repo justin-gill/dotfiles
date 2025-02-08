@@ -1,4 +1,6 @@
 .cfg
+.env
+.gp.md
 .config/nvim/plugin
 .config/tmux/plugins
 .local/bin/mise
