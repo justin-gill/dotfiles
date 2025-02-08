@@ -6,6 +6,7 @@ opt.nu = true
 opt.relativenumber = true
 opt.spelllang = 'en_us'
 opt.spell = true
+opt.fixendofline = false
 
 opt.tabstop = 4
 opt.softtabstop = 4
