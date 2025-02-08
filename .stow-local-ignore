@@ -4,3 +4,4 @@ apt-pkglist.txt
 ubuntu-config.txt
 flatpaks.txt
 .git
+sample.env
