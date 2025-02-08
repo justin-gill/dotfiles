@@ -6,13 +6,16 @@ return {
             require("mason").setup()
             require('mason-lspconfig').setup({
                 ensure_installed = {
-                    'basedpyright',
-                    'bashls',
-                    'dockerls',
-                    'docker_compose_language_service',
-                    'lua_ls',
-                    'rust_analyzer',
-                    'ts_ls',
+                    'basedpyright', -- python
+                    'rust_analyzer', -- rust
+                    'ts_ls', -- typescript
+                    'bashls', -- bash
+                    'lua_ls', -- lua
+                    'dockerls', -- docker
+                    'docker_compose_language_service', -- docker compose
+                    'gopls', -- go
+                    'terraformls', -- terraform
+                    -- 'csharp_ls', -- csharp
                 },
                 handlers = {
                     function(server_name)
@@ -75,4 +78,5 @@ return {
             )
         end
     },
+    {'tpope/vim-sleuth'},
 }

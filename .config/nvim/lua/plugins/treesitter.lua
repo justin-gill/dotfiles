@@ -1,21 +1,25 @@
-  return {
+return {
     "nvim-treesitter/nvim-treesitter",
-    opts = {
-      ensure_installed = {
-        "bash",
-        "html",
-        "javascript",
-        "json",
-        "lua",
-        "markdown",
-        "markdown_inline",
-        "python",
-        "query",
-        "regex",
-        "tsx",
-        "typescript",
-        "vim",
-        "yaml",
-      },
-    },
-  }
+    build = ":TSUpdate",
+    config = function () 
+        require("nvim-treesitter.configs").setup({
+            ensure_installed = {
+                "c", -- required
+                "lua", -- required
+                "vim", -- required
+                "vimdoc", -- required
+                "markdown", -- required
+                "query", -- required
+                "json",
+                "yaml",
+                "csv",
+                "regex",
+                "bash",
+            },
+            auto_install = true,
+            sync_install = false,
+            highlight = { enable = true },
+            indent = { enable = true },
+        })
+    end
+}

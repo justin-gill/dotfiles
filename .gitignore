@@ -1,5 +1,8 @@
 .cfg
+.env
+.gp.md
 .config/nvim/plugin
 .config/tmux/plugins
 .local/bin/mise
 Pictures/wallpapers/*.jpg
+Pictures/wallpapers/*.png
