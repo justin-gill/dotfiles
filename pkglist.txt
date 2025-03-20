@@ -5,6 +5,7 @@ base-devel
 bash-completion
 blueman
 bluez
+bluez-utils
 brightnessctl
 btop
 cmake

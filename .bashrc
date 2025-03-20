@@ -94,6 +94,8 @@ bind -x '"\C-f": tmux-sessionizer'
 alias vim='nvim'
 alias vi='nvim'
 alias ta='tmux a'
+# kill all tmux sessions
+alias tx='tmux kill-server'
 
 export EDITOR='vim'
 export VISUAL='vim'
