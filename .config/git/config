@@ -1,0 +1,13 @@
+[core]
+    autocrlf = input
+    safecrlf = true
+
+[commit]
+    verbose = true
+
+[pull]
+    ff=only
+
+[push]
+    autoSetupRemote = true
+
