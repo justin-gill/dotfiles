@@ -7,6 +7,8 @@ opt.relativenumber = true
 opt.spelllang = 'en_us'
 opt.spell = true
 opt.fixendofline = false
+opt.ignorecase = true
+opt.smartcase = true
 
 opt.tabstop = 4
 opt.softtabstop = 4
