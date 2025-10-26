@@ -1,30 +1,39 @@
 local opt = vim.opt
+
+-- UI/Display Settings
 opt.signcolumn = 'yes'
 opt.termguicolors = true
-
 opt.nu = true
 opt.relativenumber = true
-opt.spelllang = 'en_us'
-opt.spell = true
-opt.fixendofline = false
-opt.ignorecase = true
-opt.smartcase = true
+opt.fillchars = "vert:│,fold:┈,diff:┈"
 
+-- Editing Behavior
+opt.spell = true
+opt.spelllang = 'en_us'
+opt.fixendofline = false
+
+-- Indentation Settings
 opt.tabstop = 4
 opt.softtabstop = 4
 opt.shiftwidth = 4
 opt.expandtab = true
-opt.fillchars= "vert:│,fold:┈,diff:┈"
 
+-- Search Settings
+opt.ignorecase = true
+opt.smartcase = true
 opt.hlsearch = true
-opt.wildmenu = true
 opt.incsearch = true
 
+-- Command-line Completion
+opt.wildmenu = true
+
+-- Performance
 opt.updatetime = 50
+
+-- Clipboard Settings
 opt.clipboard:append("unnamedplus")
 
-vim.g.copilot_enabled = false
-
+-- WSL Clipboard Integration
 local function is_wsl()
     local f = io.popen("uname -a")
     if not f then

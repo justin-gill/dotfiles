@@ -9,6 +9,7 @@ return {
                 "vim", -- required
                 "vimdoc", -- required
                 "markdown", -- required
+                "markdown_inline", -- required for codecompanion
                 "query", -- required
                 "json",
                 "yaml",
