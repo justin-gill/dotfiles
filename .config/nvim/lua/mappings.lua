@@ -1,33 +1,65 @@
+--[[
+  Keymaps Reference
+
+  Leader: <Space>
+
+  ## File & Navigation
+  <leader>pv   - File explorer (netrw)
+  <leader>b    - Buffer picker
+  <leader>ff   - Find files (Telescope)
+  <leader>fg   - Live grep (Telescope)
+  <leader>gt   - Git status (Telescope)
+
+  ## LSP (when attached)
+  K            - Hover documentation
+  gd           - Go to definition
+  gD           - Go to declaration
+  gi           - Go to implementation
+  go           - Go to type definition
+  gr           - Find references
+  gs           - Signature help
+  <F2>         - Rename symbol
+  <F3>         - Format code
+  <F4>         - Code actions
+  <leader>d    - Show diagnostics (floating)
+
+  ## Completion (Insert mode)
+  <C-n>        - Next completion item
+  <C-p>        - Previous completion item
+  <CR>         - Confirm completion
+  <C-d>        - Scroll docs down
+  <C-u>        - Scroll docs up
+
+  ## Editing
+  <C-/>        - Toggle comment (visual mode)
+
+  ## Navigation (Tmux integration)
+  <C-h>        - Navigate left
+  <C-j>        - Navigate down
+  <C-k>        - Navigate up
+  <C-l>        - Navigate right
+
+  ## AI (CodeCompanion)
+  <C-a>        - Action palette
+  <leader>cc   - Toggle chat
+  ga           - Add selection to chat (visual)
+  <leader>ci   - Inline assistant
+  <leader>ce   - Explain code
+  <leader>cf   - Fix code
+  <leader>ct   - Generate tests
+  <leader>cm   - Generate commit message
+--]]
+
+-- Set <Space> as leader key
+vim.g.mapleader = ' '
+
 local map = vim.keymap.set
-vim.g.mapleader = " "
-vim.api.nvim_set_keymap("n", "<Leader>b", "<cmd>:buffers<CR>:buffer<Space>", { noremap = true })
 
-map("n", "<leader>pv", vim.cmd.Ex)
+-- File explorer
+map('n', '<leader>pv', vim.cmd.Ex, { desc = 'Open file explorer (:Ex)' })
 
--- Telescope
-map("n", "<leader>ff", "<cmd> Telescope find_files <CR>")
-map("n", "<leader>fg", "<cmd> Telescope live_grep <CR>")
-map("n", "<leader>gt", "<cmd> Telescope git_status <CR>")
+-- Buffer navigation
+map('n', '<leader>b', '<cmd>:buffers<CR>:buffer<Space>', { noremap = true, desc = 'List and switch buffers' })
 
--- Commentary
-map("v", "<C-_>", ":Commentary<CR>", { noremap = true })
-
--- LSP
-vim.api.nvim_create_autocmd('LspAttach', {
-  desc = 'LSP actions',
-  callback = function(event)
-    local opts = {buffer = event.buf}
-
-    vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)
-    vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)
-    vim.keymap.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)
-    vim.keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
-    vim.keymap.set('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>', opts)
-    vim.keymap.set('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
-    vim.keymap.set('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
-    vim.keymap.set('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
-    vim.keymap.set({'n', 'x'}, '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
-    vim.keymap.set('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
-  end,
-})
-
+-- Diagnostics
+map('n', '<leader>d', vim.diagnostic.open_float, { desc = 'Show diagnostic under cursor' })

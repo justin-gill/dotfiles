@@ -1,5 +1,4 @@
 {
-
     "layer": "top",
     "position": "top",
     "height": 39,
@@ -14,8 +13,8 @@
             "*": [ 1,2,3,4 ]
         },
         "format-icons": {
-             "active": "",
-             "default": "",
+            "active": "",
+            "default": "",
         },
     },
     "bluetooth": {
@@ -34,13 +33,13 @@
             "mode-mon-col"  : 3,
             "on-scroll"     : 1,
             "format": {
-                  "months":     "<span color='#B2B2B2'><b>{}</b></span>",
-                  "days":       "<span color='#B2B2B2'><b>{}</b></span>",
-                  "weeks":      "<span color='#B2B2B2'><b>W{}</b></span>",
-                  "weekdays":   "<span color='#B2B2B2'><b>{}</b></span>",
-                  "today":      "<span color='#ff6699'><b><u>{}</u></b></span>"
-                  }
-            },
+                "months":     "<span color='#B2B2B2'><b>{}</b></span>",
+                "days":       "<span color='#B2B2B2'><b>{}</b></span>",
+                "weeks":      "<span color='#B2B2B2'><b>W{}</b></span>",
+                "weekdays":   "<span color='#B2B2B2'><b>{}</b></span>",
+                "today":      "<span color='#ff6699'><b><u>{}</u></b></span>"
+            }
+        },
         "actions":  {
             "on-click-right": "mode",
             "on-scroll-up": "shift_up",

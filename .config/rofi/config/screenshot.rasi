@@ -62,7 +62,7 @@ entry {
 }
 
 inputbar {
-	children: 						[ textbox-prompt-colon, prompt ];
+    children: 						[ textbox-prompt-colon, prompt ];
     background-color:               @BG;
     text-color:                     @FG;
     expand:                         false;
@@ -131,23 +131,23 @@ element selected {
 }
 
 element.active,
-element.selected.urgent {
-  background-color: @ON;
-  text-color: @BG;
-  border-color: @ON;
+    element.selected.urgent {
+    background-color: @ON;
+    text-color: @BG;
+    border-color: @ON;
 }
 
 element.selected.urgent {
-  border-color: @BDR;
+    border-color: @BDR;
 }
 
 element.urgent,
-element.selected.active {
-  background-color: @OFF;
-  text-color: @BG;
-  border-color: @OFF;
+    element.selected.active {
+    background-color: @OFF;
+    text-color: @BG;
+    border-color: @OFF;
 }
 
 element.selected.active {
-  border-color: @BDR;
+    border-color: @BDR;
 }

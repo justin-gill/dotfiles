@@ -2,6 +2,7 @@ gnome-tweaks
 alacritty
 tmux
 stow
+flatpak
 fzf
 ripgrep
 gcc
