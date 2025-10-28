@@ -22,10 +22,6 @@ opt.expandtab = true
 opt.ignorecase = true
 opt.smartcase = true
 opt.hlsearch = true
-opt.incsearch = true
-
--- Command-line Completion
-opt.wildmenu = true
 
 -- Performance
 opt.updatetime = 50

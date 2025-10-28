@@ -1,15 +1,8 @@
 # .bashrc
 shopt -s histappend
 
-if ! pgrep -u "$USER" ssh-agent > /dev/null; then
-    ssh-agent -t 1h > "$XDG_RUNTIME_DIR/ssh-agent.env"
-fi
-if [[ ! -f "$SSH_AUTH_SOCK" ]]; then
-    source "$XDG_RUNTIME_DIR/ssh-agent.env" >/dev/null
-fi
-
 if [ -f ~/.env ]; then
-    . ~/.env
+  . ~/.env
 fi
 
 HISTSIZE=10000
@@ -34,28 +27,19 @@ PS1="${LIGHT_GREEN}\u@${LIGHT_GREEN}\h ${LIGHT_BLUE}\w${PEACH}\$([ -n \"\$(git b
 
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
-    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='ls --color=auto'
-    #alias dir='dir --color=auto'
-    #alias vdir='vdir --color=auto'
+  test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+  alias ls='ls --color=auto'
+  #alias dir='dir --color=auto'
+  #alias vdir='vdir --color=auto'
 
-    alias grep='grep --color=auto'
-    alias fgrep='fgrep --color=auto'
-    alias egrep='egrep --color=auto'
+  alias grep='grep --color=auto'
+  alias fgrep='fgrep --color=auto'
+  alias egrep='egrep --color=auto'
 fi
 
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
-
-# Alias definitions.
-# You may want to put all your additions into a separate file like
-# ~/.bash_aliases, instead of adding them here directly.
-# See /usr/share/doc/bash-doc/examples in the bash-doc package.
-
-# if [ -f ~/.bash_aliases ]; then
-#     . ~/.bash_aliases
-# fi
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
@@ -70,44 +54,61 @@ fi
 
 # Source global definitions
 if [ -f /etc/bashrc ]; then
-	. /etc/bashrc
+  . /etc/bashrc
 fi
 
 # User specific environment
 if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:" ]]
 then
-    PATH="$HOME/.local/bin:$HOME/bin:$PATH"
+  PATH="$HOME/.local/bin:$HOME/bin:$PATH"
 fi
+PATH="${PATH:+${PATH}:}$HOME/.fzf/bin"
+PATH="${PATH:+${PATH}:}$HOME/go/bin"
 export PATH
 
 # User specific aliases and functions
 if [ -d ~/.bashrc.d ]; then
-	for rc in ~/.bashrc.d/*; do
-		if [ -f "$rc" ]; then
-			. "$rc"
-		fi
-	done
+  for rc in ~/.bashrc.d/*; do
+    if [ -f "$rc" ]; then
+      . "$rc"
+    fi
+  done
 fi
 
-unset rc
-bind -x '"\C-f": tmux-sessionizer'
+if [[ $- == *i* ]]; then
+  unset rc
+  bind -x '"\C-f": tmux-sessionizer'
+fi
 alias vim='nvim'
 alias vi='nvim'
 alias ta='tmux a'
 # kill all tmux sessions
 alias tx='tmux kill-server'
+alias tf='terraform'
+alias k='kubectl'
+complete -F __start_kubectl k
 
 export EDITOR='vim'
 export VISUAL='vim'
 export QT_STYLE_OVERRIDE=Adwaita-Dark
 
 function was() {
-    ~/.cargo/bin/wa-cli -s query "$*"
+  ~/.cargo/bin/wa-cli -s query "$*"
 }
 
 function wa() {
-    ~/.cargo/bin/wa-cli query "$*"
+  ~/.cargo/bin/wa-cli query "$*"
 }
 
 eval "$(mise activate bash)"
 
+export DOTNET_ROOT=/usr/share/dotnet
+
+complete -C /usr/bin/terraform terraform
+alias assume="source assume"
+
+# [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+# docker-compose is docker compose
+alias docker-compose='docker compose'
+export PATH="$HOME/.gem/ruby/$(ruby -e "puts RbConfig::CONFIG[\"ruby_version\"]")/bin:$PATH"
+export PATH="$HOME/.local/share/gem/ruby/3.2.0/bin:$PATH"

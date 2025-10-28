@@ -38,12 +38,12 @@ window#waybar {
 
 
 #workspaces button:hover {
-  border-color: transparent;
+    border-color: transparent;
 }
 
 #workspaces button {
-  border: none;
-  padding: 10px;
+    border: none;
+    padding: 10px;
 }
 
 .modules-right, .modules-center, .modules-left {

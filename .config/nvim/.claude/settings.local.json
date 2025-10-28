@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(find:*)",
-      "Read(//home/any/.dotfiles/**)"
+      "Read(//home/any/.dotfiles/**)",
+      "Read(//home/justin/.dotfiles/.config/**)"
     ],
     "deny": [],
     "ask": []

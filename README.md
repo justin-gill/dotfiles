@@ -78,3 +78,9 @@ Ensure Literation Mono font is installed before syncing with dconf
 ```bash
 dconf load / < $HOME/.dotfiles/ubuntu-config.txt
 ```
+
+Audio Effect Support (for lack of noise cancellation in chromium based apps)
+```bash
+flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+flatpak install flathub com.github.wwmm.easyeffects
+```
