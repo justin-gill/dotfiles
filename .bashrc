@@ -64,6 +64,7 @@ then
 fi
 PATH="${PATH:+${PATH}:}$HOME/.fzf/bin"
 PATH="${PATH:+${PATH}:}$HOME/go/bin"
+PATH="${PATH:+${PATH}:}$HOME/.cargo/bin"
 export PATH
 
 # User specific aliases and functions
@@ -82,7 +83,6 @@ fi
 alias vim='nvim'
 alias vi='nvim'
 alias ta='tmux a'
-# kill all tmux sessions
 alias tx='tmux kill-server'
 alias tf='terraform'
 alias k='kubectl'
@@ -108,7 +108,6 @@ complete -C /usr/bin/terraform terraform
 alias assume="source assume"
 
 # [ -f ~/.fzf.bash ] && source ~/.fzf.bash
-# docker-compose is docker compose
 alias docker-compose='docker compose'
 export PATH="$HOME/.gem/ruby/$(ruby -e "puts RbConfig::CONFIG[\"ruby_version\"]")/bin:$PATH"
 export PATH="$HOME/.local/share/gem/ruby/3.2.0/bin:$PATH"
