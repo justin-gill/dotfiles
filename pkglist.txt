@@ -22,6 +22,7 @@ grim
 hyprland
 hyprlock
 jq
+kubectl
 less
 man-db
 neovim
@@ -33,12 +34,9 @@ nwg-look
 openssh
 pavucontrol
 polkit-gnome
-qt5
-qt5-quickcontrols
 ripgrep
 rofi
 rustup
-sddm
 slurp
 sof-firmware
 stow

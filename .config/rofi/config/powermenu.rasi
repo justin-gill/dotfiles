@@ -130,8 +130,7 @@ element selected {
     border-color:                   @BDR;
 }
 
-element.active,
-    element.selected.urgent {
+element.active, element.selected.urgent {
     background-color: @ON;
     text-color: @BG;
     border-color: @ON;
@@ -141,8 +140,7 @@ element.selected.urgent {
     border-color: @BDR;
 }
 
-element.urgent,
-    element.selected.active {
+element.urgent, element.selected.active {
     background-color: @OFF;
     text-color: @BG;
     border-color: @OFF;
