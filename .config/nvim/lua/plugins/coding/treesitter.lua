@@ -24,6 +24,7 @@ return {
                 "bash",
                 "gdscript",
                 "godot_resource",
+                "tmux",
                 "gdshader",
             },
             auto_install = true,

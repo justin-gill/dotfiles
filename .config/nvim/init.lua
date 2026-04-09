@@ -9,6 +9,8 @@ vim.filetype.add({
     },
     pattern = {
         ["Caddyfile.*"] = "caddy",
+        ["config.ghostty"] = "conf",
+        ["tmux.conf"] = "tmux",
     },
 })
 

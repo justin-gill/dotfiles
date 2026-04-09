@@ -11,3 +11,8 @@
 [push]
     autoSetupRemote = true
 
+[init]
+	defaultBranch = main
+[user]
+	email = gill.justin1999@gmail.com
+	name = Justin Gill

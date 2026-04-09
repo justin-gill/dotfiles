@@ -1,12 +1,8 @@
 #!/usr/bin/python3
 
 import subprocess
-import dotenv
-import pywal
-
+import random
 from pathlib import Path
-
-dotenv.load_dotenv()
 
 CONFIG = {
     "config_path": Path("~/.config").expanduser(),
@@ -14,6 +10,7 @@ CONFIG = {
 }
 
 def flatten_dict(dictionary: dict, parent_key: str = '', separator: str = '_'):
+    """Flatten nested dictionaries (same as your version)."""
     items = []
     for key, value in dictionary.items():
         new_key = parent_key + separator + key if parent_key else key
@@ -23,19 +20,25 @@ def flatten_dict(dictionary: dict, parent_key: str = '', separator: str = '_'):
             items.append((new_key, value))
     return dict(items)
 
+def get_random_wallpaper(folder: Path) -> str:
+    """Return a random image file path from the wallpaper folder."""
+    image_extensions = {".jpg", ".jpeg", ".png", ".bmp", ".webp"}
+    wallpapers = [f for f in folder.iterdir() if f.suffix.lower() in image_extensions]
+    if not wallpapers:
+        raise FileNotFoundError(f"No wallpapers found in {folder}")
+    return str(random.choice(wallpapers))
+
 if __name__ == "__main__":
-    # selects random image from wallpaper folder
-    wallpaper = pywal.image.get(CONFIG["wallpaper_folder"])
+    wallpaper = get_random_wallpaper(CONFIG["wallpaper_folder"])
+    print(f"Setting wallpaper to: {wallpaper}")
 
-    subprocess.Popen(["swww", "img", wallpaper, "--transition-type=wipe", "--transition-fps=60"])
+    # Set wallpaper using awww
+    subprocess.Popen([
+        "awww", "img", wallpaper,
+        "--transition-type=wipe",
+        "--transition-fps=60"
+    ])
 
-    # Kill all instances of Waybar
-    subprocess.run(['killall', 'waybar'])
-
-    # Use pywal to get colors
-    colors = pywal.colors.get(wallpaper)
-    pywal.export.every(colors)
-
-    # Start Waybar in the background
-    subprocess.Popen(['waybar'])
-
+    # Restart Waybar
+    subprocess.run(["killall", "waybar"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    subprocess.Popen(["waybar"])
