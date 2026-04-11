@@ -1,5 +1,4 @@
 acpi
-alacritty
 alsa-utils
 base-devel
 bash-completion
@@ -52,3 +51,6 @@ vim
 waybar
 wl-clipboard
 xdg-desktop-portal-hyprland
+mise
+usage
+ghostty

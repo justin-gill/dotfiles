@@ -1,0 +1,21 @@
+# vim: ft=config
+
+# Font & Shell
+font-family = "LiterationMono Nerd Font"
+font-size = 12
+command = /bin/bash
+
+# Window Styling
+window-padding-x = 10
+window-padding-y = 10
+window-decoration = none
+theme = "Catppuccin Mocha"
+confirm-close-surface = false
+
+# Interaction & Clipboard
+mouse-scroll-multiplier = 1
+mouse-hide-while-typing = true
+mouse-shift-capture = true
+clipboard-read = allow
+clipboard-write = allow
+copy-on-select = true

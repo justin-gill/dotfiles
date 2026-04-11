@@ -4,5 +4,8 @@
 .config/nvim/plugin
 .config/tmux/plugins
 .local/bin/mise
+user.gitconfig
 Pictures/wallpapers/*.jpg
 Pictures/wallpapers/*.png
+Pictures/screenshots/*.png
+Pictures/screenshots/*.jpg
