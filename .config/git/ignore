@@ -1,4 +1,7 @@
+# local mise
 .mise.local.toml
-.venv
 
-**/.claude/settings.local.json
+# vim / nvim
+*.swp
+*.swo
+*~

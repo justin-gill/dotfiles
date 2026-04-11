@@ -79,12 +79,14 @@
         "bat": "BAT2"
     },
     "network": {
-        // "interface": "wlp2*", // (Optional) To force the use of this interface
-        "format-wifi": "{essid} {icon}",
-        "format-disconnected": "Disconnected ⚠",
-        "format-icons": ["󰤥 ", "󰤢 ", "󰤟 "],
-
-        "on-click": "alacritty --class floating -e nmtui"
+        "format-wifi": "{icon}  {essid}",
+        "format-ethernet": " 󰲝 ",
+        "format-disconnected": "⚠  Disconnected",
+        "format-icons": ["󰤟 ", "󰤢 ", "󰤥 "],
+        "tooltip-format-wifi": "Signal: {signalStrength}% | IP: {ipaddr}",
+        "tooltip-format-ethernet": "IP: {ipaddr} | {ifname}",
+        "tooltip-format-disconnected": "Network offline",
+        "on-click": "ghostty --class=com.ghostty.floating -e $HOME/.config/waybar/scripts/nmtui-colored"
     },
     "custom/power": {
         "format": "",
@@ -93,7 +95,7 @@
     "custom/tailscale": {
         "format": "{}",
         "interval": 5,
-        "exec": "$HOME/.config/waybar/scripts/info-tailscale.sh",
+        "exec": "$HOME/.config/waybar/scripts/info-tailscale",
 
     },
     "tray":{

@@ -1,3 +1,8 @@
+# XDG git config, remove ~/.gitconfig if exists so git will fallback here
+
+[include]
+    path = user.gitconfig # for local [user] block
+
 [core]
     autocrlf = input
     safecrlf = true
@@ -6,13 +11,16 @@
     verbose = true
 
 [pull]
-    ff=only
+    rebase = true
 
 [push]
     autoSetupRemote = true
 
+[fetch]
+    prune = true
+
 [init]
-	defaultBranch = main
-[user]
-	email = gill.justin1999@gmail.com
-	name = Justin Gill
+    defaultBranch = main
+
+[alias]
+    lg = log --graph --oneline
