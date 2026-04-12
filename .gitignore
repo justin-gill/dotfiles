@@ -2,6 +2,7 @@
 .env
 .gp.md
 .config/nvim/plugin
+.config/nvim/schemas
 .config/tmux/plugins
 .local/bin/mise
 user.gitconfig

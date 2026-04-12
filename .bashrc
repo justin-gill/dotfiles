@@ -94,8 +94,6 @@ export QT_STYLE_OVERRIDE=Adwaita-Dark
 
 eval "$(mise activate bash)"
 
-export DOTNET_ROOT=/usr/share/dotnet
-
 complete -C /usr/bin/terraform terraform
 alias assume='source assume'
 alias kctx='kubectl config use-context $(kubectl config get-contexts -o name | fzf --height 40% --reverse --border)'

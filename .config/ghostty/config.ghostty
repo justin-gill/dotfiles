@@ -8,7 +8,8 @@ command = /bin/bash
 # Window Styling
 window-padding-x = 10
 window-padding-y = 10
-window-decoration = none
+window-decoration = auto
+title = "ghostty"
 theme = "Catppuccin Mocha"
 confirm-close-surface = false
 

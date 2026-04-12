@@ -9,7 +9,7 @@ opt.signcolumn = "yes"
 opt.termguicolors = true
 opt.nu = true
 opt.relativenumber = true
-opt.spell = true
+opt.spell = false
 opt.tabstop = 4
 opt.shiftwidth = 4
 opt.expandtab = true
@@ -19,13 +19,21 @@ opt.clipboard:append("unnamedplus")
 opt.laststatus = 3
 opt.autocomplete = true
 
+-- Disable autocomplete inside Telescope prompts
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "TelescopePrompt",
+    callback = function()
+        vim.opt_local.autocomplete = false
+    end,
+})
+
 -- ==========================================
 -- Plugins
 -- ==========================================
 vim.pack.add({
     { src = "https://github.com/lewis6991/gitsigns.nvim" },
     { src = "https://github.com/nvim-lua/plenary.nvim" },
-    { src = "https://github.com/nvim-telescope/telescope.nvim"},
+    { src = "https://github.com/nvim-telescope/telescope.nvim" },
     { src = "https://github.com/christoomey/vim-tmux-navigator" },
     { src = "https://github.com/catppuccin/nvim", name = "catppuccin" },
     { src = "https://github.com/nvim-tree/nvim-web-devicons" },
@@ -35,12 +43,11 @@ vim.pack.add({
     { src = "https://github.com/williamboman/mason-lspconfig.nvim" },
     { src = "https://github.com/williamboman/mason.nvim" },
     { src = "https://github.com/WhoIsSethDaniel/mason-tool-installer.nvim" },
-    { src = "https://github.com/stevearc/conform.nvim" },
-    { src = "https://github.com/mfussenegger/nvim-lint" },
+    { src = "https://github.com/towolf/vim-helm" },
 })
 
 -- ==========================================
--- UI & Syntax (Standard Requires!)
+-- UI & Syntax
 -- ==========================================
 vim.cmd.colorscheme("catppuccin-mocha")
 
@@ -58,78 +65,133 @@ require("nvim-treesitter").setup({
 })
 
 -- ==========================================
--- LSP Native Config
+-- LSP
 -- ==========================================
 require("mason").setup()
-
 require("mason-tool-installer").setup({
-    ensure_installed = { "cfn-lint", "yamllint", "tflint" },
+    ensure_installed = {
+        "cfn-lint",
+        "goimports",
+        "tflint",
+    },
 })
-
 require("mason-lspconfig").setup({
     ensure_installed = {
-        "lua_ls", "basedpyright", "yamlls", "helm_ls",
-        "terraformls", "bashls", "rust_analyzer", "ts_ls"
+        "azure_pipelines_ls",
+        "bashls",
+        "csharp_ls",
+        "gopls",
+        "helm_ls",
+        "lua_ls",
+        "ruff",
+        "rust_analyzer",
+        "stylua",
+        "terraformls",
+        "ts_ls",
+        "ty",
+        "yamlls",
     },
-    automatic_enable = true,
 })
 
-vim.lsp.config('lua_ls', {
-    settings = { Lua = { diagnostics = { globals = { 'vim' } } } }
+vim.filetype.add({
+    pattern = {
+        [".*/.azure%-pipelines/.*%.ya?ml"] = "yaml.azure-pipelines",
+        [".*/azure%-pipeline.*%.ya?ml"] = "yaml.azure-pipelines",
+        [".*/templates/.*%.ya?ml"] = function(path)
+            if vim.fs.root(path, "Chart.yaml") then
+                return "helm"
+            end
+        end,
+        [".*/templates/.*%.tpl"] = function(path)
+            if vim.fs.root(path, "Chart.yaml") then
+                return "helm"
+            end
+        end,
+        [".*values.*%.ya?ml"] = function(path)
+            if vim.fs.root(path, "Chart.yaml") then
+                return "yaml.helm-values"
+            end
+        end,
+        ["Chart%.yaml"] = "yaml.helm",
+    },
+})
+
+-- Org-specific task schema for Azure Pipelines (provides task-level completions).
+-- Fetch from: https://dev.azure.com/YOUR-ORG/_apis/distributedtask/yamlschema
+-- Save to: ~/.config/nvim/schemas/azure-pipelines-tasks.json
+local azure_task_schema = vim.fn.stdpath("config") .. "/schemas/azure-pipelines-tasks.json"
+local azure_schema_globs = {
+    "**/.azure-pipelines/*.yml",
+    "**/.azure-pipelines/*.yaml",
+    "**/azure-pipeline*.yml",
+    "**/azure-pipeline*.yaml",
+}
+local azure_schemas = {}
+if vim.uv.fs_stat(azure_task_schema) then
+    azure_schemas["file://" .. azure_task_schema] = azure_schema_globs
+else
+    azure_schemas["https://raw.githubusercontent.com/microsoft/azure-pipelines-vscode/master/service-schema.json"] = azure_schema_globs
+end
+
+vim.lsp.config("azure_pipelines_ls", {
+    cmd = { vim.fn.expand("~/.local/share/nvim/mason/bin/azure-pipelines-language-server"), "--stdio" },
+    filetypes = { "yaml.azure-pipelines" },
+    root_markers = { ".azure-pipelines", ".git" },
+    settings = { yaml = { schemas = azure_schemas } },
+})
+
+vim.lsp.config("ruff", {
+    on_attach = function(client)
+        client.server_capabilities.hoverProvider = false
+    end,
+})
+
+vim.lsp.config("yamlls", {
+    filetypes = { "yaml", "yaml.helm-values" },
+    settings = {
+        yaml = { schemas = { kubernetes = { "/*.yaml", "/*.yml" } } },
+        redhat = { telemetry = { enabled = false } },
+    },
+})
+
+vim.lsp.enable({
+    "azure_pipelines_ls",
+    "bashls",
+    "csharp_ls",
+    "gopls",
+    "helm_ls",
+    "lua_ls",
+    "ruff",
+    "rust_analyzer",
+    "stylua",
+    "terraformls",
+    "tflint",
+    "ts_ls",
+    "ty",
+    "yamlls",
 })
 
 vim.api.nvim_create_autocmd("LspAttach", {
     callback = function(args)
         local opts = { buffer = args.buf }
-        map("n", "<leader>d", vim.diagnostic.open_float, { buffer = args.buf, desc = "Line diagnostics" })
         map("n", "K", vim.lsp.buf.hover, opts)
         map("n", "gd", vim.lsp.buf.definition, opts)
         map("n", "gr", vim.lsp.buf.references, opts)
         map("n", "<F2>", vim.lsp.buf.rename, opts)
         map("n", "<F4>", vim.lsp.buf.code_action, opts)
-    end,
-})
-
-vim.api.nvim_create_autocmd("CompleteChanged", {
-    callback = function()
-        if vim.fn.pumvisible() == 1 then
-            vim.lsp.buf.hover()
-        end
+        map("n", "<leader>d", vim.diagnostic.open_float, { desc = "Line diagnostics" })
+        map("n", "<leader>lf", vim.lsp.buf.format, opts)
     end,
 })
 
 -- ==========================================
--- 5. Formatting & Linting
+-- General Keymaps
 -- ==========================================
-require("conform").setup({
-    format_on_save = function(bufnr)
-        if vim.bo[bufnr].filetype == "cs" then
-            return
-        end
-        local filepath = vim.api.nvim_buf_get_name(bufnr)
-        if vim.fs.find(".editorconfig", { path = filepath, upward = true })[1] then
-            return { timeout_ms = 2000, lsp_fallback = true }
-        end
-    end,
-})
-
-local lint = require("lint")
-lint.linters_by_ft = { terraform = { "tflint" }, yaml = { "yamllint" } }
-
-vim.api.nvim_create_autocmd({ "BufWritePost", "BufEnter", "InsertLeave" }, {
-    callback = function()
-        lint.try_lint()
-    end,
-})
-
--- ==========================================
--- 6. General Keymaps
--- ==========================================
+local builtin = require("telescope.builtin")
 map("n", "<leader>pv", vim.cmd.Ex, { desc = "File explorer" })
-map("n", "<leader>b", "<cmd>buffers<CR>:buffer ", { desc = "Switch buffers" })
-
-map("n", "<leader>ff", "<cmd>Telescope find_files<CR>")
-map("n", "<leader>fg", "<cmd>Telescope live_grep<CR>")
+map("n", "<leader>ff", builtin.find_files, { desc = "Telescope find files" })
+map("n", "<leader>fg", builtin.live_grep, { desc = "Telescope live grep" })
+map("n", "<leader>fb", builtin.buffers, { desc = "Telescope buffers" })
 
 map("n", "<c-h>", "<cmd>TmuxNavigateLeft<cr>")
 map("n", "<c-j>", "<cmd>TmuxNavigateDown<cr>")
