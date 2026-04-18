@@ -38,7 +38,7 @@ vim.pack.add({
     { src = "https://github.com/catppuccin/nvim", name = "catppuccin" },
     { src = "https://github.com/nvim-tree/nvim-web-devicons" },
     { src = "https://github.com/nvim-lualine/lualine.nvim" },
-    { src = "https://github.com/nvim-treesitter/nvim-treesitter" },
+    { src = "https://github.com/nvim-treesitter/nvim-treesitter", branch = "main" },
     { src = "https://github.com/neovim/nvim-lspconfig" },
     { src = "https://github.com/williamboman/mason-lspconfig.nvim" },
     { src = "https://github.com/williamboman/mason.nvim" },
@@ -58,10 +58,34 @@ require("lualine").setup({
     },
 })
 
-require("nvim-treesitter").setup({
-    auto_install = true,
-    highlight = { enable = true },
-    indent = { enable = true },
+-- Currently requires nvim-treesitter CLI tool (npm / cargo)
+-- ==========================================
+-- Tree-sitter Configuration... eventually change when another solution exists
+-- ==========================================
+
+local ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "bicep" }
+local already_installed = require("nvim-treesitter.config").get_installed()
+local parsers_to_install = vim.iter(ensure_installed)
+    :filter(function(parser)
+        return not vim.tbl_contains(already_installed, parser)
+    end)
+    :totable()
+
+if #parsers_to_install > 0 then
+    require("nvim-treesitter").install(parsers_to_install)
+end
+
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "*",
+    callback = function()
+        -- Attempt to enable native Tree-sitter highlighting
+        pcall(vim.treesitter.start)
+
+        -- Attempt to enable Tree-sitter based indentation
+        pcall(function()
+            vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+        end)
+    end,
 })
 
 -- ==========================================
