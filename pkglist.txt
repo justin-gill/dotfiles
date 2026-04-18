@@ -1,5 +1,4 @@
 acpi
-alacritty
 alsa-utils
 base-devel
 bash-completion
@@ -15,6 +14,7 @@ dunst
 firefox
 flatpak
 fzf
+gcc
 git
 gnome-themes-extra
 go
@@ -43,6 +43,7 @@ stow
 swww
 tailscale
 thunar
+tree-sitter-cli
 tmux
 ttf-liberation-mono-nerd
 udiskie
@@ -52,3 +53,6 @@ vim
 waybar
 wl-clipboard
 xdg-desktop-portal-hyprland
+mise
+usage
+ghostty

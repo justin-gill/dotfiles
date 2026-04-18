@@ -1,3 +1,5 @@
+# vim: ft=config
+
 [global]
     word_wrap = yes
     markup = full
@@ -45,4 +47,3 @@
     background = "#24273a"
     foreground = "#cad3f5"
     frame_color = "#f5a97f"
-

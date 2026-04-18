@@ -1,0 +1,21 @@
+#!/bin/bash
+export NEWT_COLORS='
+  root=,#1e1e2e;
+  window=#cdd6f4,#181825;
+  shadow=#1e1e2e,#1e1e2e;
+  title=#cba6f7,#181825;
+  label=#bac2de,#181825;
+  textbox=#cdd6f4,#181825;
+  acttextbox=#1e1e2e,#89b4fa;
+  entry=#1e1e2e,#89b4fa;
+  disentry=#bac2de,#313244;
+  listbox=#cdd6f4,#181825;
+  actsellistbox=#1e1e2e,#f9e2af;
+  button=#cdd6f4,#313244;
+  actbutton=#1e1e2e,#a6e3a1;
+  compactbutton=#cdd6f4,#313244;
+  actcompactbutton=#1e1e2e,#89b4fa;
+  checkbox=#bac2de,#181825;
+  actcheckbox=#1e1e2e,#a6e3a1
+'
+nmtui

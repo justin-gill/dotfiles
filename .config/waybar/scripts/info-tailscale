@@ -1,0 +1,38 @@
+#!/bin/sh
+
+ICON_ACTIVE_TAILSCALE="    Tailscale"
+ICON_ACTIVE_MULLVAD="    Mullvad"
+ICON_BOTH_ACTIVE=""
+ICON_INACTIVE=""
+
+# 1. Check Tailscale status
+status_tailscale=$(curl --silent --fail --unix-socket /var/run/tailscale/tailscaled.sock http://local-tailscaled.sock/localapi/v0/status 2>/dev/null)
+
+if [ $? != 0 ]; then
+    status_tailscale="Stopped"
+fi
+
+if [ "$(echo "${status_tailscale}" | jq --raw-output .BackendState)" = "Running" ]; then
+    tailscale_active=1
+else
+    tailscale_active=0
+fi
+
+# 2. Check Mullvad status
+# Using ^Connected ensures it doesn't accidentally match "Disconnected"
+if mullvad status 2>/dev/null | grep -qi "^Connected"; then
+    mullvad_active=1
+else
+    mullvad_active=0
+fi
+
+# 3. Output the correct icon to Waybar
+if [ ${tailscale_active} -eq 1 ] && [ ${mullvad_active} -eq 1 ]; then
+    echo "${ICON_BOTH_ACTIVE}"
+elif [ ${tailscale_active} -eq 1 ]; then
+    echo "${ICON_ACTIVE_TAILSCALE}"
+elif [ ${mullvad_active} -eq 1 ]; then
+    echo "${ICON_ACTIVE_MULLVAD}"
+else
+    echo "${ICON_INACTIVE}"
+fi

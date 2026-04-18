@@ -1,6 +1,6 @@
 [tools]
-node = 'latest'
+node = "25"
+go = "1.24"
 
 [settings]
-python_compile = true
-
+disable_tools = ["python"] # use system python outside of projects
