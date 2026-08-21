@@ -56,3 +56,9 @@ xdg-desktop-portal-hyprland
 mise
 usage
 ghostty
+lemurs
+vlc
+mpv
+tumbler
+thunar-archive-plugin
+xarchiver

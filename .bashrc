@@ -1,13 +1,46 @@
-# .bashrc
-shopt -s histappend
+[[ $- != *i* ]] && return
 
-if [ -f ~/.env ]; then
-  . ~/.env
+# System configurations
+if [ -f /etc/bash.bashrc ]; then
+  . /etc/bash.bashrc
+elif [ -f /etc/bashrc ]; then
+  . /etc/bashrc
 fi
 
-HISTSIZE=10000
-HISTFILESIZE=20000
+if ! shopt -oq posix && [ -z "${BASH_COMPLETION_VERSINFO-}" ]; then
+  if [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+  elif [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+  fi
+fi
 
+# Environment variables
+export BROWSER="firefox"
+export EDITOR="nvim"
+export VISUAL="nvim"
+export QT_STYLE_OVERRIDE="Adwaita-Dark"
+export GOPATH="$HOME/.go"
+export CARGO_HOME="$HOME/.cargo"
+export PATH="$HOME/.local/bin:$HOME/bin:$HOME/.fzf/bin:$GOPATH/bin:$CARGO_HOME/bin:$PATH"
+
+export NEWT_COLORS='
+  root=,#1e1e2e; window=#cdd6f4,#181825; shadow=#1e1e2e,#1e1e2e;
+  title=#cba6f7,#181825; label=#bac2de,#181825; textbox=#cdd6f4,#181825;
+  acttextbox=#1e1e2e,#89b4fa; entry=#1e1e2e,#89b4fa; disentry=#bac2de,#313244;
+  listbox=#cdd6f4,#181825; actsellistbox=#1e1e2e,#f9e2af; button=#cdd6f4,#313244;
+  actbutton=#1e1e2e,#a6e3a1; compactbutton=#cdd6f4,#313244; actcompactbutton=#1e1e2e,#89b4fa;
+  checkbox=#bac2de,#181825; actcheckbox=#1e1e2e,#a6e3a1;
+'
+
+# Bash behavior & history
+shopt -s histappend
+export HISTSIZE=10000
+export HISTFILESIZE=20000
+export HISTCONTROL=ignoreboth
+export PROMPT_COMMAND="history -a; ${PROMPT_COMMAND:-}"
+
+# Prompt
 LIGHT_BLUE="\[\e[38;5;153m\]"
 PEACH="\[\e[38;5;174m\]"
 LIGHT_GREEN="\[\e[38;5;151m\]"
@@ -16,20 +49,17 @@ RESET="\[\e[0m\]"
 parse_git_branch() {
   local branch
   branch=$(git branch --show-current 2>/dev/null)
+  [[ -z "$branch" ]] && return
 
-  if [[ -z "$branch" ]]; then
-    return
-  fi
-
-  if [[ -n $(git status --porcelain 2>/dev/null) ]]; then
+  if git rev-parse --quiet --verify HEAD >/dev/null && ! git diff-index --quiet HEAD -- 2>/dev/null; then
     echo " $branch*"
   else
     echo " $branch"
   fi
 }
-
 PS1="${LIGHT_GREEN}\u@${LIGHT_GREEN}\h ${LIGHT_BLUE}\w${PEACH}\$(parse_git_branch) ${RESET}\$ "
 
+# Aliases
 if [ -x /usr/bin/dircolors ]; then
   test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
   alias ls='ls --color=auto'
@@ -41,84 +71,31 @@ fi
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
-
-if ! shopt -oq posix; then
-  if [ -f /usr/share/bash-completion/bash_completion ]; then
-    . /usr/share/bash-completion/bash_completion
-  elif [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-  fi
-fi
-
-# Source global definitions
-if [ -f /etc/bashrc ]; then
-  . /etc/bashrc
-fi
-
-export GOPATH="$HOME/.go"
-export CARGO_HOME="$HOME/.cargo"
-
-PATH="$HOME/.local/bin:$HOME/bin:$PATH"
-PATH="$PATH:$HOME/.fzf/bin"
-PATH="$PATH:$GOPATH/bin"
-PATH="$PATH:$CARGO_HOME/bin"
-export PATH
-
-# User specific aliases and functions
-if [ -d ~/.bashrc.d ]; then
-  for rc in ~/.bashrc.d/*; do
-    if [ -f "$rc" ]; then
-      . "$rc"
-    fi
-  done
-fi
-
-if [[ $- == *i* ]]; then
-  unset rc
-  bind -x '"\C-f": tmux-sessionizer'
-fi
+alias ..='cd ..'
 alias vim='nvim'
 alias vi='nvim'
 alias ta='tmux a'
 alias tx='tmux kill-server'
-alias tf='terraform'
-alias k='kubectl'
-if command -v kubectl >/dev/null 2>&1; then
-  source <(kubectl completion bash)
-  complete -F __start_kubectl k
-fi
+alias docker-compose='docker compose'
 
-export EDITOR='nvim'
-export VISUAL='nvim'
-export QT_STYLE_OVERRIDE=Adwaita-Dark
+# Keybindings
+bind -x '"\C-f": tmux-sessionizer'
 
+# Tool initializations & completions
 eval "$(mise activate bash)"
-
-complete -C /usr/bin/terraform terraform
-alias assume='source assume'
-alias kctx='kubectl config use-context $(kubectl config get-contexts -o name | fzf --height 40% --reverse --border)'
 
 if command -v fzf >/dev/null 2>&1; then
   eval "$(fzf --bash 2>/dev/null)"
 fi
 
-alias docker-compose='docker compose'
-export NEWT_COLORS='
-  root=,#1e1e2e;
-  window=#cdd6f4,#181825;
-  shadow=#1e1e2e,#1e1e2e;
-  title=#cba6f7,#181825;
-  label=#bac2de,#181825;
-  textbox=#cdd6f4,#181825;
-  acttextbox=#1e1e2e,#89b4fa;
-  entry=#1e1e2e,#89b4fa;
-  disentry=#bac2de,#313244;
-  listbox=#cdd6f4,#181825;
-  actsellistbox=#1e1e2e,#f9e2af;
-  button=#cdd6f4,#313244;
-  actbutton=#1e1e2e,#a6e3a1;
-  compactbutton=#cdd6f4,#313244;
-  actcompactbutton=#1e1e2e,#89b4fa;
-  checkbox=#bac2de,#181825;
-  actcheckbox=#1e1e2e,#a6e3a1;
-'
+# Local includes
+if [ -d ~/.bashrc.d ]; then
+  for rc in ~/.bashrc.d/*; do
+    [ -f "$rc" ] && . "$rc"
+  done
+  unset rc
+fi
+
+if [ -f ~/.bash_local ]; then
+  . ~/.bash_local
+fi

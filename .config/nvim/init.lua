@@ -43,7 +43,6 @@ vim.pack.add({
     { src = "https://github.com/williamboman/mason-lspconfig.nvim" },
     { src = "https://github.com/williamboman/mason.nvim" },
     { src = "https://github.com/WhoIsSethDaniel/mason-tool-installer.nvim" },
-    { src = "https://github.com/towolf/vim-helm" },
 })
 
 -- ==========================================
@@ -56,6 +55,15 @@ require("lualine").setup({
         component_separators = { left = "|", right = "|" },
         section_separators = { left = "", right = "" },
     },
+    sections = {
+      lualine_c = {
+        {
+          'filename',
+          file_status = true,
+          path = 1
+        }
+      }
+    }
 })
 
 -- Currently requires nvim-treesitter CLI tool (npm / cargo)
@@ -63,7 +71,7 @@ require("lualine").setup({
 -- Tree-sitter Configuration... eventually change when another solution exists
 -- ==========================================
 
-local ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "bicep" }
+local ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "bicep", "c_sharp", "terraform", "yaml", "helm", "gotmpl" }
 local already_installed = require("nvim-treesitter.config").get_installed()
 local parsers_to_install = vim.iter(ensure_installed)
     :filter(function(parser)
@@ -103,7 +111,7 @@ require("mason-lspconfig").setup({
     ensure_installed = {
         "azure_pipelines_ls",
         "bashls",
-        "csharp_ls",
+        -- "csharp_ls",
         "gopls",
         "helm_ls",
         "lua_ls",
@@ -118,6 +126,9 @@ require("mason-lspconfig").setup({
 })
 
 vim.filetype.add({
+    filename = {
+        [".bash_local"] = "bash",
+    },
     pattern = {
         [".*/.azure%-pipelines/.*%.ya?ml"] = "yaml.azure-pipelines",
         [".*/azure%-pipeline.*%.ya?ml"] = "yaml.azure-pipelines",
@@ -137,6 +148,7 @@ vim.filetype.add({
             end
         end,
         ["Chart%.yaml"] = "yaml.helm",
+        [".*%.bashrc"] = "bash",
     },
 })
 
@@ -164,16 +176,41 @@ vim.lsp.config("azure_pipelines_ls", {
     settings = { yaml = { schemas = azure_schemas } },
 })
 
+vim.lsp.config("terraformls", {
+    on_attach = function(client)
+        client.server_capabilities.semanticTokensProvider = nil
+    end,
+})
+
 vim.lsp.config("ruff", {
     on_attach = function(client)
         client.server_capabilities.hoverProvider = false
     end,
 })
 
+vim.lsp.config("helm_ls", {
+    settings = {
+        ["helm-ls"] = {
+            yamlls = {
+                path = "yaml-language-server",
+                config = {
+                    schemas = {},
+                    schemaStore = { enable = true },
+                    completion = true,
+                    hover = true,
+                    validation = true,
+                },
+            },
+        },
+    },
+})
+
 vim.lsp.config("yamlls", {
     filetypes = { "yaml", "yaml.helm-values" },
     settings = {
-        yaml = { schemas = { kubernetes = { "/*.yaml", "/*.yml" } } },
+        yaml = {
+            schemaStore = { enable = true },
+        },
         redhat = { telemetry = { enabled = false } },
     },
 })
@@ -181,7 +218,7 @@ vim.lsp.config("yamlls", {
 vim.lsp.enable({
     "azure_pipelines_ls",
     "bashls",
-    "csharp_ls",
+    -- "csharp_ls",
     "gopls",
     "helm_ls",
     "lua_ls",
@@ -189,7 +226,6 @@ vim.lsp.enable({
     "rust_analyzer",
     "stylua",
     "terraformls",
-    "tflint",
     "ts_ls",
     "ty",
     "yamlls",

@@ -29,7 +29,6 @@ sudo ufw enable
 * Various Services
 ```
 sudo systemctl enable bluetooth
-sudo systemctl enable sddm.service
 sudo systemctl enable tailscaled
 sudo systemctl start tailscaled
 sudo tailscale set --operator=$USER 
@@ -43,7 +42,6 @@ rustup default stable # prereq
 
 * [mise](https://mise.jdx.dev/installing-mise.html)
 * [tpm](https://github.com/tmux-plugins/tpm) (Use ~/.config/tmux/plugins/tpm)
-* [SDDM Sugar Light Theme](https://github.com/MarianArlt/sddm-sugar-light?tab=readme-ov-file#installing-the-theme)
 * [Docker post-install](https://docs.docker.com/engine/install/linux-postinstall/)
 
 
