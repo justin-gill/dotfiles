@@ -28,6 +28,7 @@ man-db
 neovim
 networkmanager
 nfs-utils
+noctalia
 noto-fonts
 noto-fonts-emoji
 nwg-look
@@ -56,7 +57,6 @@ xdg-desktop-portal-hyprland
 mise
 usage
 ghostty
-lemurs
 vlc
 mpv
 tumbler

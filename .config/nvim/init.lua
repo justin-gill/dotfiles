@@ -17,15 +17,7 @@ opt.ignorecase = true
 opt.smartcase = true
 opt.clipboard:append("unnamedplus")
 opt.laststatus = 3
-opt.autocomplete = true
-
--- Disable autocomplete inside Telescope prompts
-vim.api.nvim_create_autocmd("FileType", {
-    pattern = "TelescopePrompt",
-    callback = function()
-        vim.opt_local.autocomplete = false
-    end,
-})
+opt.completeopt = { "menu", "menuone", "noselect" }
 
 -- ==========================================
 -- Plugins
@@ -234,6 +226,12 @@ vim.lsp.enable({
 vim.api.nvim_create_autocmd("LspAttach", {
     callback = function(args)
         local opts = { buffer = args.buf }
+        local client = vim.lsp.get_client_by_id(args.data.client_id)
+
+        if client and client:supports_method("textDocument/completion") then
+            vim.lsp.completion.enable(true, client.id, args.buf, { autotrigger = true })
+        end
+
         map("n", "K", vim.lsp.buf.hover, opts)
         map("n", "gd", vim.lsp.buf.definition, opts)
         map("n", "gr", vim.lsp.buf.references, opts)
@@ -260,3 +258,13 @@ map("n", "<c-l>", "<cmd>TmuxNavigateRight<cr>")
 
 map("v", "<C-_>", "gc", { remap = true, desc = "Toggle comment" })
 map("n", "<C-_>", "gcc", { remap = true, desc = "Toggle comment" })
+
+-- Trigger LSP completion with C-n if menu is closed, otherwise navigate next
+map("i", "<C-n>", function()
+    return vim.fn.pumvisible() == 1 and "<C-n>" or "<C-x><C-o>"
+end, { expr = true, desc = "Trigger LSP completion" })
+
+-- Accept completion with Enter
+map("i", "<CR>", function()
+    return vim.fn.pumvisible() == 1 and "<C-y>" or "<CR>"
+end, { expr = true, desc = "Accept completion with Enter" })
