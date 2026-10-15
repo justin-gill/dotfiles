@@ -10,11 +10,8 @@ hl.workspace_rule({ workspace = "3", persistent = true})
 hl.workspace_rule({ workspace = "4", monitor = "desc:Acer Technologies Acer V277U 0x10322DB7", persistent = true })
 
 hl.on("hyprland.start", function()
-    local apps = {
-        "noctalia", "udiskie &", "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1",
-        "ghostty --gtk-single-instance=true --quit-after-last-window-closed=false --initial-window=false"
-    }
-    for _, app in ipairs(apps) do hl.exec_cmd(app) end
+    hl.exec_cmd("noctalia")
+    hl.exec_cmd("udiskie &")
 end)
 
 hl.env("XCURSOR_SIZE", 24)
@@ -57,18 +54,19 @@ local bind = hl.bind
 local ipc = "noctalia msg "
 
 -- Core binds
-hl.bind(mod .. "+Space", hl.dsp.exec_cmd(ipc .. "panel-toggle launcher"))
-hl.bind(mod .. "+S", hl.dsp.exec_cmd(ipc .. "panel-toggle control-center"))
-hl.bind(mod .. "+Tab", hl.dsp.exec_cmd(ipc .. "window-switcher"))
-hl.bind(mod .. "+ SHIFT + L", hl.dsp.exec_cmd(ipc .. "session lock"))
-hl.bind("CTRL + SHIFT + S", hl.dsp.exec_cmd(ipc .. "screenshot-region"))
+bind(mod .. " + Space", hl.dsp.exec_cmd(ipc .. "panel-toggle launcher"))
+bind(mod .. " + S", hl.dsp.exec_cmd(ipc .. "panel-toggle control-center"))
+bind(mod .. " + Tab", hl.dsp.exec_cmd(ipc .. "window-switcher"))
+bind(mod .. " + P", hl.dsp.exec_cmd(ipc .. "panel-toggle session"))
+bind(mod .. " + SHIFT + L", hl.dsp.exec_cmd(ipc .. "session lock"))
+bind("CTRL + SHIFT + S", hl.dsp.exec_cmd(ipc .. "screenshot-region"))
 
 -- Media keys
-hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd(ipc .. "volume-up"))
-hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd(ipc .. "volume-down"))
-hl.bind("XF86AudioMute", hl.dsp.exec_cmd(ipc .. "volume-mute"))
-hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd(ipc .. "brightness-up"))
-hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd(ipc .. "brightness-down"))
+bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd(ipc .. "volume-up"))
+bind("XF86AudioLowerVolume", hl.dsp.exec_cmd(ipc .. "volume-down"))
+bind("XF86AudioMute", hl.dsp.exec_cmd(ipc .. "volume-mute"))
+bind("XF86MonBrightnessUp", hl.dsp.exec_cmd(ipc .. "brightness-up"))
+bind("XF86MonBrightnessDown", hl.dsp.exec_cmd(ipc .. "brightness-down"))
 
 -- Noctalia Settings
 hl.window_rule({
@@ -101,7 +99,3 @@ bind(mod .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" }))
 bind(mod .. " + mouse_up", hl.dsp.focus({ workspace = "e-1" }))
 bind(mod .. " + mouse:272", hl.dsp.window.drag(), { mouse = true })
 bind(mod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
-
-
-
-

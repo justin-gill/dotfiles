@@ -1,12 +1,14 @@
 .cfg
 .env
 .gp.md
-.config/nvim/plugin
 .config/nvim/schemas
 .config/tmux/plugins
+.config/git/config.local
 .local/bin/mise
-user.gitconfig
-Pictures/wallpapers/*.jpg
-Pictures/wallpapers/*.png
-Pictures/screenshots/*.png
-Pictures/screenshots/*.jpg
+.local/share/
+.local/state/
+# Ignore everything under Pictures; only the .placeholder markers stay tracked.
+# The directory re-include is required so git can descend to the placeholders.
+Pictures/**
+!Pictures/**/
+!Pictures/**/.placeholder

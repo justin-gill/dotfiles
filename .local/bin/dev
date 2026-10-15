@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# Split right pane (25% width) for Claude
+# Spare shell in the right pane, 25% width
 tmux split-window -h -l "$(( $(tmux display -p '#{pane_width}') * 25 / 100 ))"
 
-# Select left pane and split it horizontally (1/5 height for bottom pane)
+# Split the left pane, reserving a bottom pane at 1/5 height
 tmux select-pane -L
 tmux split-window -v -l "$(( $(tmux display -p '#{pane_height}') / 5 ))"
 
-# Start nvim in top-left pane and start claude in right pane
+# Start nvim in the top-left pane, then leave focus on the bottom-left pane
 tmux select-pane -U \; send-keys 'nvim' C-m
 tmux select-pane -R \;
 tmux select-pane -L \; select-pane -D

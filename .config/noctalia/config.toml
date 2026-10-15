@@ -1,12 +1,15 @@
+[audio]
+enable_overdrive = true
+
 [bar]
 order = [ "main" ]
 
     [bar.default]
-    background_opacity = 0.69999999999999996
+    background_opacity = 0.7
     center = [ "clock" ]
     enabled = true
     end = [ "tray", "clipboard", "network", "bluetooth", "volume", "brightness", "battery", "notifications", "session" ]
-    font_family = ""
+    font_family = "Adwaita Sans"
     font_scale = 1.0
     font_weight = 500
     hover_highlight = true
@@ -42,8 +45,11 @@ widget_order = []
 
     [desktop_widgets.widget]
 
-[location]
-auto_locate = true
+[idle]
+pre_action_fade_seconds = 0
+
+[lockscreen]
+transition = []
 
 [lockscreen_widgets]
 enabled = false
@@ -114,3 +120,8 @@ unit = "imperial"
 
 [widget.clock]
 format = "{:%-I:%M:%S %p}"
+
+# Suppress the OSD popup shown on MPRIS playback / track changes
+# (the "notification" that appears every time a new song or video starts).
+[osd.kinds]
+media = false

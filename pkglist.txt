@@ -10,7 +10,6 @@ btop
 cmake
 docker
 docker-compose
-dunst
 firefox
 flatpak
 fzf
@@ -18,9 +17,7 @@ gcc
 git
 gnome-themes-extra
 go
-grim
 hyprland
-hyprlock
 jq
 kubectl
 less
@@ -36,12 +33,9 @@ openssh
 pavucontrol
 polkit-gnome
 ripgrep
-rofi
 rustup
-slurp
 sof-firmware
 stow
-swww
 tailscale
 thunar
 tree-sitter-cli
@@ -51,7 +45,6 @@ udiskie
 ufw
 unzip
 vim
-waybar
 wl-clipboard
 xdg-desktop-portal-hyprland
 mise
@@ -62,3 +55,4 @@ mpv
 tumbler
 thunar-archive-plugin
 xarchiver
+zip

@@ -1,7 +1,7 @@
-# XDG git config, remove ~/.gitconfig if exists so git will fallback here
-
-[include]
-    path = user.gitconfig # for local [user] block
+# Base git config (tracked) -- shared defaults for every machine.
+# Two levels, lowest precedence first:
+#   1. this file     -- shared defaults, tracked in the dotfiles repo
+#   2. config.local  -- per-machine overrides, untracked (git-ignored)
 
 [core]
     autocrlf = input
@@ -22,6 +22,8 @@
     defaultBranch = main
 
 [alias]
-    lg = log --graph --pretty=format:'%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
-    up = pull --rebase --autostash origin main
-    gone = ! "git fetch -p && git for-each-ref --format '%(refname:short) %(upstream:track)' | awk '$2 == \"[gone]\" {print $1}' | xargs -r git branch -D"
+    lg = log --graph --pretty=tformat:'%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
+    gone = ! git fetch && git for-each-ref refs/heads --format='%(if:equals=[gone])%(upstream:track)%(then)%(refname:short)%(end)' | xargs -r -n 1 git branch -D
+
+[include]
+    path = config.local

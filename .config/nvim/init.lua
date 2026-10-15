@@ -48,14 +48,14 @@ require("lualine").setup({
         section_separators = { left = "", right = "" },
     },
     sections = {
-      lualine_c = {
-        {
-          'filename',
-          file_status = true,
-          path = 1
-        }
-      }
-    }
+        lualine_c = {
+            {
+                "filename",
+                file_status = true,
+                path = 1,
+            },
+        },
+    },
 })
 
 -- Currently requires nvim-treesitter CLI tool (npm / cargo)
@@ -63,7 +63,8 @@ require("lualine").setup({
 -- Tree-sitter Configuration... eventually change when another solution exists
 -- ==========================================
 
-local ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "bicep", "c_sharp", "terraform", "yaml", "helm", "gotmpl" }
+local ensure_installed =
+    { "c", "lua", "vim", "vimdoc", "query", "bicep", "c_sharp", "terraform", "yaml", "helm", "gotmpl" }
 local already_installed = require("nvim-treesitter.config").get_installed()
 local parsers_to_install = vim.iter(ensure_installed)
     :filter(function(parser)
@@ -97,6 +98,7 @@ require("mason-tool-installer").setup({
         "cfn-lint",
         "goimports",
         "tflint",
+        "shfmt",
     },
 })
 require("mason-lspconfig").setup({
@@ -158,7 +160,8 @@ local azure_schemas = {}
 if vim.uv.fs_stat(azure_task_schema) then
     azure_schemas["file://" .. azure_task_schema] = azure_schema_globs
 else
-    azure_schemas["https://raw.githubusercontent.com/microsoft/azure-pipelines-vscode/master/service-schema.json"] = azure_schema_globs
+    azure_schemas["https://raw.githubusercontent.com/microsoft/azure-pipelines-vscode/master/service-schema.json"] =
+        azure_schema_globs
 end
 
 vim.lsp.config("azure_pipelines_ls", {
@@ -243,12 +246,38 @@ vim.api.nvim_create_autocmd("LspAttach", {
 })
 
 -- ==========================================
+-- Telescope
+-- ==========================================
+local rg_ignore_args = { "--hidden", "--glob", "!**/.git/**" }
+
+require("telescope").setup({
+    pickers = {
+        find_files = {
+            find_command = function()
+                return vim.list_extend({ "rg", "--files", "--color=never" }, rg_ignore_args)
+            end,
+        },
+        live_grep = {
+            vimgrep_arguments = vim.list_extend({
+                "rg",
+                "--color=never",
+                "--no-heading",
+                "--with-filename",
+                "--line-number",
+                "--column",
+                "--smart-case",
+            }, rg_ignore_args),
+        },
+    },
+})
+
+-- ==========================================
 -- General Keymaps
 -- ==========================================
 local builtin = require("telescope.builtin")
 map("n", "<leader>pv", vim.cmd.Ex, { desc = "File explorer" })
-map("n", "<leader>ff", builtin.find_files, { desc = "Telescope find files" })
-map("n", "<leader>fg", builtin.live_grep, { desc = "Telescope live grep" })
+map("n", "<leader>ff", builtin.find_files, { desc = "Telescope find files (incl. dotfiles, respects .gitignore)" })
+map("n", "<leader>fg", builtin.live_grep, { desc = "Telescope live grep (incl. dotfiles, respects .gitignore)" })
 map("n", "<leader>fb", builtin.buffers, { desc = "Telescope buffers" })
 
 map("n", "<c-h>", "<cmd>TmuxNavigateLeft<cr>")
