@@ -1,44 +1,124 @@
 -- ==========================================
--- Options & Globals
+-- Options
 -- ==========================================
 vim.g.mapleader = " "
+
 local opt = vim.opt
 local map = vim.keymap.set
 
+-- UI
 opt.signcolumn = "yes"
-opt.termguicolors = true
-opt.nu = true
+opt.laststatus = 3
+opt.winborder = "rounded"
+opt.pumborder = "rounded"
+opt.number = true
 opt.relativenumber = true
-opt.spell = false
+opt.scrolloff = 4
+
+-- Editing
 opt.tabstop = 4
 opt.shiftwidth = 4
 opt.expandtab = true
+opt.undofile = true
+
+-- Search
 opt.ignorecase = true
 opt.smartcase = true
+
+-- Completion
+opt.completeopt = { "menu", "menuone", "noselect", "fuzzy" }
 opt.clipboard:append("unnamedplus")
-opt.laststatus = 3
-opt.completeopt = { "menu", "menuone", "noselect" }
 
 -- ==========================================
--- Plugins
+-- Packages
 -- ==========================================
-vim.pack.add({
-    { src = "https://github.com/lewis6991/gitsigns.nvim" },
-    { src = "https://github.com/nvim-lua/plenary.nvim" },
-    { src = "https://github.com/nvim-telescope/telescope.nvim" },
-    { src = "https://github.com/christoomey/vim-tmux-navigator" },
+local plugins = {
+    "https://github.com/lewis6991/gitsigns.nvim",
+    "https://github.com/nvim-lua/plenary.nvim",
+    "https://github.com/nvim-telescope/telescope.nvim",
+    "https://github.com/christoomey/vim-tmux-navigator",
     { src = "https://github.com/catppuccin/nvim", name = "catppuccin" },
-    { src = "https://github.com/nvim-tree/nvim-web-devicons" },
-    { src = "https://github.com/nvim-lualine/lualine.nvim" },
-    { src = "https://github.com/nvim-treesitter/nvim-treesitter", branch = "main" },
-    { src = "https://github.com/neovim/nvim-lspconfig" },
-    { src = "https://github.com/williamboman/mason-lspconfig.nvim" },
-    { src = "https://github.com/williamboman/mason.nvim" },
-    { src = "https://github.com/WhoIsSethDaniel/mason-tool-installer.nvim" },
+    "https://github.com/nvim-tree/nvim-web-devicons",
+    "https://github.com/nvim-lualine/lualine.nvim",
+    { src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "main" },
+    "https://github.com/neovim/nvim-lspconfig",
+    "https://github.com/williamboman/mason-lspconfig.nvim",
+    "https://github.com/williamboman/mason.nvim",
+}
+
+-- Disable vim-tmux-navigator's default mappings; the described versions in
+-- the keymaps section are the only ones defined. Must be set before
+-- vim.pack.add(), which sources the plugin.
+vim.g.tmux_navigator_no_mappings = 1
+
+vim.pack.add(plugins)
+
+-- Split installed packages into active (added this session) and stale (left
+-- on disk after removal from `plugins`). Nothing here lazy-loads, so stale
+-- always means "removed from the plugin list".
+---@return string[] active, string[] stale
+local function pack_status()
+    local active, stale = {}, {}
+    for _, p in ipairs(vim.pack.get(nil, { info = false })) do
+        local bucket = p.active and active or stale
+        bucket[#bucket + 1] = p.spec.name
+    end
+    table.sort(active)
+    table.sort(stale)
+    return active, stale
+end
+
+-- Nvim 0.13 adds built-in `:packupdate[!]` and `:packdel ++all`; delete both
+-- custom commands then. A package removed from `plugins` this session is
+-- still active until restart, so run PackClean after restarting.
+local function pack_clean(bang)
+    local _, stale = pack_status()
+
+    if #stale == 0 then
+        vim.notify(
+            "PackClean: no stale packages (restart to detect packages removed this session)",
+            vim.log.levels.INFO
+        )
+        return
+    end
+    if not bang then
+        local choice = vim.fn.confirm(
+            ("Delete %d stale package(s)?\n\n%s"):format(#stale, table.concat(stale, "\n")),
+            "&Yes\n&No",
+            2
+        )
+        if choice ~= 1 then
+            return
+        end
+    end
+    vim.pack.del(stale)
+end
+
+-- `:PackClean` asks for confirmation; `:PackClean!` deletes immediately.
+vim.api.nvim_create_user_command("PackClean", function(opts)
+    pack_clean(opts.bang)
+end, { bang = true, desc = "Delete packages left on disk after removal from the plugin list" })
+
+-- `:PackUpdate` updates every package; `:PackUpdate name...` updates a
+-- subset. `:PackUpdate!` skips the confirmation buffer.
+vim.api.nvim_create_user_command("PackUpdate", function(opts)
+    vim.pack.update(#opts.fargs > 0 and opts.fargs or nil, { force = opts.bang })
+end, {
+    bang = true,
+    nargs = "*",
+    desc = "Update packages (all by default)",
+    complete = function(arg_lead)
+        local active = pack_status()
+        return vim.tbl_filter(function(name)
+            return vim.startswith(name, arg_lead)
+        end, active)
+    end,
 })
 
+local builtin = require("telescope.builtin")
+
 -- ==========================================
--- UI & Syntax
+-- UI
 -- ==========================================
 vim.cmd.colorscheme("catppuccin-mocha")
 
@@ -58,31 +138,46 @@ require("lualine").setup({
     },
 })
 
--- Currently requires nvim-treesitter CLI tool (npm / cargo)
 -- ==========================================
--- Tree-sitter Configuration... eventually change when another solution exists
+-- Treesitter
 -- ==========================================
-
-local ensure_installed =
-    { "c", "lua", "vim", "vimdoc", "query", "bicep", "c_sharp", "terraform", "yaml", "helm", "gotmpl" }
-local already_installed = require("nvim-treesitter.config").get_installed()
-local parsers_to_install = vim.iter(ensure_installed)
+-- Parser installation requires the tree-sitter CLI.
+local parsers = {
+    "bash",
+    "bicep",
+    "c_sharp",
+    "go",
+    "gomod",
+    "gosum",
+    "gotmpl",
+    "helm",
+    "json",
+    "lua",
+    "python",
+    "rust",
+    "terraform",
+    "tsx",
+    "typescript",
+    "vim",
+    "vimdoc",
+    "yaml",
+}
+local installed_parsers = require("nvim-treesitter.config").get_installed()
+local missing_parsers = vim.iter(parsers)
     :filter(function(parser)
-        return not vim.tbl_contains(already_installed, parser)
+        return not vim.tbl_contains(installed_parsers, parser)
     end)
     :totable()
 
-if #parsers_to_install > 0 then
-    require("nvim-treesitter").install(parsers_to_install)
+if #missing_parsers > 0 then
+    require("nvim-treesitter").install(missing_parsers)
 end
 
+-- Enable native Tree-sitter highlighting and indentation per filetype.
 vim.api.nvim_create_autocmd("FileType", {
     pattern = "*",
     callback = function()
-        -- Attempt to enable native Tree-sitter highlighting
         pcall(vim.treesitter.start)
-
-        -- Attempt to enable Tree-sitter based indentation
         pcall(function()
             vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
         end)
@@ -92,170 +187,100 @@ vim.api.nvim_create_autocmd("FileType", {
 -- ==========================================
 -- LSP
 -- ==========================================
-require("mason").setup()
-require("mason-tool-installer").setup({
-    ensure_installed = {
-        "cfn-lint",
-        "goimports",
-        "tflint",
-        "shfmt",
-    },
-})
-require("mason-lspconfig").setup({
-    ensure_installed = {
-        "azure_pipelines_ls",
-        "bashls",
-        -- "csharp_ls",
-        "gopls",
-        "helm_ls",
-        "lua_ls",
-        "ruff",
-        "rust_analyzer",
-        "stylua",
-        "terraformls",
-        "ts_ls",
-        "ty",
-        "yamlls",
-    },
-})
+local servers = {
+    "bashls",
+    "bicep",
+    "gopls",
+    "helm_ls",
+    "lua_ls", -- editing this config
+    "roslyn_ls", -- C#
+    "ruff",
+    "rust_analyzer",
+    "stylua", -- Lua formatting
+    "terraformls",
+    "ts_ls",
+    "ty",
+    "yamlls", -- Helm values, Kubernetes manifests
+}
+
+-- Assign the filetype only when the path belongs to a Helm chart.
+local function helm_ft(filetype)
+    return function(path)
+        return vim.fs.root(path, "Chart.yaml") ~= nil and filetype or nil
+    end
+end
 
 vim.filetype.add({
     filename = {
         [".bash_local"] = "bash",
     },
     pattern = {
-        [".*/.azure%-pipelines/.*%.ya?ml"] = "yaml.azure-pipelines",
-        [".*/azure%-pipeline.*%.ya?ml"] = "yaml.azure-pipelines",
-        [".*/templates/.*%.ya?ml"] = function(path)
-            if vim.fs.root(path, "Chart.yaml") then
-                return "helm"
-            end
-        end,
-        [".*/templates/.*%.tpl"] = function(path)
-            if vim.fs.root(path, "Chart.yaml") then
-                return "helm"
-            end
-        end,
-        [".*values.*%.ya?ml"] = function(path)
-            if vim.fs.root(path, "Chart.yaml") then
-                return "yaml.helm-values"
-            end
-        end,
-        ["Chart%.yaml"] = "yaml.helm",
+        [".*/templates/.*%.ya?ml"] = helm_ft("helm"),
+        [".*/templates/.*%.tpl"] = helm_ft("helm"),
+        [".*values.*%.ya?ml"] = helm_ft("yaml.helm-values"),
         [".*%.bashrc"] = "bash",
     },
 })
 
--- Org-specific task schema for Azure Pipelines (provides task-level completions).
--- Fetch from: https://dev.azure.com/YOUR-ORG/_apis/distributedtask/yamlschema
--- Save to: ~/.config/nvim/schemas/azure-pipelines-tasks.json
-local azure_task_schema = vim.fn.stdpath("config") .. "/schemas/azure-pipelines-tasks.json"
-local azure_schema_globs = {
-    "**/.azure-pipelines/*.yml",
-    "**/.azure-pipelines/*.yaml",
-    "**/azure-pipeline*.yml",
-    "**/azure-pipeline*.yaml",
-}
-local azure_schemas = {}
-if vim.uv.fs_stat(azure_task_schema) then
-    azure_schemas["file://" .. azure_task_schema] = azure_schema_globs
-else
-    azure_schemas["https://raw.githubusercontent.com/microsoft/azure-pipelines-vscode/master/service-schema.json"] =
-        azure_schema_globs
-end
-
-vim.lsp.config("azure_pipelines_ls", {
-    cmd = { vim.fn.expand("~/.local/share/nvim/mason/bin/azure-pipelines-language-server"), "--stdio" },
-    filetypes = { "yaml.azure-pipelines" },
-    root_markers = { ".azure-pipelines", ".git" },
-    settings = { yaml = { schemas = azure_schemas } },
+require("mason").setup()
+-- `servers` is the single source of truth. mason-lspconfig's default
+-- `automatic_enable = true` would also start every other installed server
+-- (basedpyright, ...) regardless of that list.
+require("mason-lspconfig").setup({
+    ensure_installed = servers,
+    automatic_enable = false,
 })
 
-vim.lsp.config("terraformls", {
-    on_attach = function(client)
-        client.server_capabilities.semanticTokensProvider = nil
-    end,
-})
-
-vim.lsp.config("ruff", {
-    on_attach = function(client)
-        client.server_capabilities.hoverProvider = false
-    end,
-})
-
-vim.lsp.config("helm_ls", {
-    settings = {
-        ["helm-ls"] = {
-            yamlls = {
-                path = "yaml-language-server",
-                config = {
-                    schemas = {},
-                    schemaStore = { enable = true },
-                    completion = true,
-                    hover = true,
-                    validation = true,
-                },
-            },
-        },
-    },
-})
-
-vim.lsp.config("yamlls", {
-    filetypes = { "yaml", "yaml.helm-values" },
-    settings = {
-        yaml = {
-            schemaStore = { enable = true },
-        },
-        redhat = { telemetry = { enabled = false } },
-    },
-})
-
-vim.lsp.enable({
-    "azure_pipelines_ls",
-    "bashls",
-    -- "csharp_ls",
-    "gopls",
-    "helm_ls",
-    "lua_ls",
-    "ruff",
-    "rust_analyzer",
-    "stylua",
-    "terraformls",
-    "ts_ls",
-    "ty",
-    "yamlls",
-})
+-- Per-server overrides live in after/lsp/<server>.lua, which merges after
+-- nvim-lspconfig's own lsp/ configs. init.lua stays server-agnostic.
+vim.lsp.enable(servers)
 
 vim.api.nvim_create_autocmd("LspAttach", {
     callback = function(args)
-        local opts = { buffer = args.buf }
+        local bufnr = args.buf
         local client = vim.lsp.get_client_by_id(args.data.client_id)
 
         if client and client:supports_method("textDocument/completion") then
-            vim.lsp.completion.enable(true, client.id, args.buf, { autotrigger = true })
+            vim.lsp.completion.enable(true, client.id, bufnr, { autotrigger = true })
         end
 
-        map("n", "K", vim.lsp.buf.hover, opts)
-        map("n", "gd", vim.lsp.buf.definition, opts)
-        map("n", "gr", vim.lsp.buf.references, opts)
-        map("n", "<F2>", vim.lsp.buf.rename, opts)
-        map("n", "<F4>", vim.lsp.buf.code_action, opts)
-        map("n", "<leader>d", vim.diagnostic.open_float, { desc = "Line diagnostics" })
-        map("n", "<leader>lf", vim.lsp.buf.format, opts)
+        if client and client:supports_method("textDocument/codeLens") then
+            vim.lsp.codelens.enable(true, { bufnr = bufnr })
+        end
+
+        local function lsp_map(lhs, rhs, desc)
+            map("n", lhs, rhs, { buffer = bufnr, desc = desc })
+        end
+
+        lsp_map("K", function()
+            vim.lsp.buf.hover({ max_width = 80, max_height = 20 })
+        end, "Hover")
+        lsp_map("gd", vim.lsp.buf.definition, "Go to definition")
+        lsp_map("<leader>ld", vim.diagnostic.open_float, "Line diagnostics")
+        lsp_map("<leader>lG", builtin.lsp_dynamic_workspace_symbols, "Workspace symbols")
+        lsp_map("<leader>lf", function()
+            vim.lsp.buf.format({ timeout_ms = 5000 })
+        end, "Format buffer")
+        if client and client:supports_method("textDocument/inlayHint") then
+            lsp_map("<leader>lh", function()
+                vim.lsp.inlay_hint.enable(
+                    not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }),
+                    { bufnr = bufnr }
+                )
+            end, "Toggle inlay hints")
+        end
     end,
 })
 
 -- ==========================================
 -- Telescope
 -- ==========================================
-local rg_ignore_args = { "--hidden", "--glob", "!**/.git/**" }
+local rg_hidden_args = { "--hidden", "--glob", "!**/.git/**" }
 
 require("telescope").setup({
     pickers = {
         find_files = {
-            find_command = function()
-                return vim.list_extend({ "rg", "--files", "--color=never" }, rg_ignore_args)
-            end,
+            find_command = vim.list_extend({ "rg", "--files", "--color=never" }, rg_hidden_args),
         },
         live_grep = {
             vimgrep_arguments = vim.list_extend({
@@ -266,34 +291,53 @@ require("telescope").setup({
                 "--line-number",
                 "--column",
                 "--smart-case",
-            }, rg_ignore_args),
+            }, rg_hidden_args),
         },
     },
 })
 
 -- ==========================================
--- General Keymaps
+-- Keymaps
 -- ==========================================
-local builtin = require("telescope.builtin")
+-- File explorer
 map("n", "<leader>pv", vim.cmd.Ex, { desc = "File explorer" })
-map("n", "<leader>ff", builtin.find_files, { desc = "Telescope find files (incl. dotfiles, respects .gitignore)" })
-map("n", "<leader>fg", builtin.live_grep, { desc = "Telescope live grep (incl. dotfiles, respects .gitignore)" })
-map("n", "<leader>fb", builtin.buffers, { desc = "Telescope buffers" })
 
-map("n", "<c-h>", "<cmd>TmuxNavigateLeft<cr>")
-map("n", "<c-j>", "<cmd>TmuxNavigateDown<cr>")
-map("n", "<c-k>", "<cmd>TmuxNavigateUp<cr>")
-map("n", "<c-l>", "<cmd>TmuxNavigateRight<cr>")
+-- Files and search (LazyVim convention)
+map("n", "<leader>ff", builtin.find_files, {
+    desc = "Find files (incl. dotfiles, respects .gitignore)",
+})
+map("n", "<leader>fg", builtin.live_grep, {
+    desc = "Live grep (incl. dotfiles, respects .gitignore)",
+})
+map("n", "<leader>fb", builtin.buffers, { desc = "Buffers" })
+map("n", "<leader>fh", builtin.help_tags, { desc = "Help tags" })
+map("n", "<leader>lD", builtin.diagnostics, { desc = "All diagnostics" })
 
-map("v", "<C-_>", "gc", { remap = true, desc = "Toggle comment" })
+-- Window navigation through tmux.
+map("n", "<C-h>", "<cmd>TmuxNavigateLeft<cr>", { desc = "Tmux: navigate left" })
+map("n", "<C-j>", "<cmd>TmuxNavigateDown<cr>", { desc = "Tmux: navigate down" })
+map("n", "<C-k>", "<cmd>TmuxNavigateUp<cr>", { desc = "Tmux: navigate up" })
+map("n", "<C-l>", "<cmd>TmuxNavigateRight<cr>", { desc = "Tmux: navigate right" })
+
+-- netrw maps <C-l> to refresh; restore tmux navigation in its buffers.
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "netrw",
+    callback = function(args)
+        map("n", "<C-l>", "<cmd>TmuxNavigateRight<cr>", { buffer = args.buf, desc = "Tmux: navigate right" })
+    end,
+})
+
+-- Comments
+map("x", "<C-_>", "gc", { remap = true, desc = "Toggle comment" })
 map("n", "<C-_>", "gcc", { remap = true, desc = "Toggle comment" })
 
--- Trigger LSP completion with C-n if menu is closed, otherwise navigate next
+-- Completion: open the LSP menu with C-n, accept with Enter.
 map("i", "<C-n>", function()
     return vim.fn.pumvisible() == 1 and "<C-n>" or "<C-x><C-o>"
 end, { expr = true, desc = "Trigger LSP completion" })
 
--- Accept completion with Enter
+-- With noselect, Enter must only complete when an item is actually selected;
+-- accepting with nothing selected would swallow the newline.
 map("i", "<CR>", function()
-    return vim.fn.pumvisible() == 1 and "<C-y>" or "<CR>"
-end, { expr = true, desc = "Accept completion with Enter" })
+    return (vim.fn.pumvisible() == 1 and vim.fn.complete_info().selected ~= -1) and "<C-y>" or "<CR>"
+end, { expr = true, desc = "Accept selected completion with Enter" })

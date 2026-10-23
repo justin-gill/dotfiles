@@ -27,7 +27,7 @@ if [[ -z $selected ]]; then
 fi
 
 selected_name=$(basename "$selected" | tr . _)
-existing_session=$(tmux list-sessions | grep "^$selected_name:" | wc -l)
+existing_session=$(tmux list-sessions | grep -c "^$selected_name:")
 
 if [[ -z $TMUX && -z $(pgrep tmux) ]]; then
     tmux new-session -s "$selected_name" -c "$selected"

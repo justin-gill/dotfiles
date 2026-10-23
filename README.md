@@ -57,7 +57,6 @@ rustup default stable # prereq
 
 * Local, untracked overrides
 ```
-cp sample.env .env                       # API keys (git-ignored)
 $EDITOR ~/.config/git/config.local       # per-machine overrides, e.g. [user] name/email (git-ignored)
 ```
 

@@ -22,7 +22,7 @@ export VISUAL="nvim"
 export QT_STYLE_OVERRIDE="Adwaita-Dark"
 export GOPATH="$HOME/.go"
 export CARGO_HOME="$HOME/.cargo"
-export PATH="$HOME/.local/bin:$HOME/bin:$HOME/.fzf/bin:$GOPATH/bin:$CARGO_HOME/bin:$PATH"
+export PATH="$HOME/.local/bin:$HOME/bin:$GOPATH/bin:$CARGO_HOME/bin:$PATH"
 
 export NEWT_COLORS='
   root=,#1e1e2e; window=#cdd6f4,#181825; shadow=#1e1e2e,#1e1e2e;
@@ -46,18 +46,15 @@ PEACH="\[\e[38;5;174m\]"
 LIGHT_GREEN="\[\e[38;5;151m\]"
 RESET="\[\e[0m\]"
 
-parse_git_branch() {
-  local branch
-  branch=$(git branch --show-current 2>/dev/null)
-  [[ -z "$branch" ]] && return
-
-  if git rev-parse --quiet --verify HEAD >/dev/null && ! git diff-index --quiet HEAD -- 2>/dev/null; then
-    echo " $branch*"
-  else
-    echo " $branch"
-  fi
-}
-PS1="${LIGHT_GREEN}\u@${LIGHT_GREEN}\h ${LIGHT_BLUE}\w${PEACH}\$(parse_git_branch) ${RESET}\$ "
+# Git branch/state in the prompt, from git's shipped prompt helper.
+if [ -f /usr/share/git/completion/git-prompt.sh ]; then
+  . /usr/share/git/completion/git-prompt.sh
+elif [ -f /usr/lib/git-core/git-sh-prompt ]; then
+  . /usr/lib/git-core/git-sh-prompt
+fi
+command -v __git_ps1 >/dev/null 2>&1 || __git_ps1() { :; }
+export GIT_PS1_SHOWDIRTYSTATE=1
+PS1="${LIGHT_GREEN}\u@${LIGHT_GREEN}\h ${LIGHT_BLUE}\w${PEACH}\$(__git_ps1 ' %s') ${RESET}\$ "
 
 # Aliases
 if [ -x /usr/bin/dircolors ]; then
@@ -82,7 +79,9 @@ alias docker-compose='docker compose'
 bind -x '"\C-f": tmux-sessionizer'
 
 # Tool initializations & completions
-eval "$(mise activate bash)"
+if command -v mise >/dev/null 2>&1; then
+  eval "$(mise activate bash)"
+fi
 
 if command -v fzf >/dev/null 2>&1; then
   eval "$(fzf --bash 2>/dev/null)"

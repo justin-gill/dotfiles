@@ -1,6 +1,7 @@
 [tools]
-node = "25"
-go = "1.24"
+node = "26"
+go = "1.26"
+uv = "0.13.5"
 
 [settings]
 disable_tools = ["python"] # use system python outside of projects

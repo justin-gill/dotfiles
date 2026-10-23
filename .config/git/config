@@ -18,6 +18,12 @@
 [fetch]
     prune = true
 
+[merge]
+    conflictStyle = zdiff3
+
+[rerere]
+    enabled = true
+
 [init]
     defaultBranch = main
 

@@ -5,6 +5,6 @@ ubuntu-config.txt
 flatpaks.txt
 .git
 .gitignore
-sample.env
+^/\.editorconfig
 corne-v4-layout.vil
 ^/\.local/(share|state|lib|include)
