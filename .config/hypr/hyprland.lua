@@ -1,13 +1,17 @@
 ---@module 'hl'
 
 hl.monitor({ output = "", mode = "preferred", position = "auto", scale = 1 })
-hl.monitor({ output = "desc:LG Electronics LG ULTRAGEAR 204NTGY8J231", mode = "3440x1440@144", position = "0x0", scale = 1 })
-hl.monitor({ output = "desc:Acer Technologies Acer V277U 0x10322DB7", mode = "2560x1440@74.89", position = "3440x-650", scale = 1, transform = 3 })
 
-hl.workspace_rule({ workspace = "1", persistent = true})
-hl.workspace_rule({ workspace = "2", persistent = true})
-hl.workspace_rule({ workspace = "3", persistent = true})
-hl.workspace_rule({ workspace = "4", monitor = "desc:Acer Technologies Acer V277U 0x10322DB7", persistent = true })
+local primary = "desc:LG Electronics"
+local secondary = "desc:Acer"
+
+hl.monitor({ output = primary, mode = "3440x1440@144", position = "0x0", scale = 1 })
+hl.monitor({ output = secondary, mode = "2560x1440@75", position = "3440x-650", scale = 1, transform = 3 })
+
+hl.workspace_rule({ workspace = "1", persistent = true })
+hl.workspace_rule({ workspace = "2", persistent = true })
+hl.workspace_rule({ workspace = "3", persistent = true })
+hl.workspace_rule({ workspace = "4", monitor = secondary, persistent = true })
 
 hl.on("hyprland.start", function()
     hl.exec_cmd("noctalia")

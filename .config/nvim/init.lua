@@ -172,6 +172,8 @@ end
 vim.api.nvim_create_autocmd("FileType", {
     pattern = "*",
     callback = function()
+        -- tftpl buffers use regex syntax; a treesitter parser would flood errors.
+        if vim.bo.filetype:find(".tftpl", 1, true) then return end
         if pcall(vim.treesitter.start) then
             vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
         end
@@ -194,9 +196,14 @@ local servers = {
     "yamlls",
 }
 
--- dotnet comes from the work laptop's .mise.local.toml.
-if vim.fn.executable("dotnet") == 1 then
-    vim.list_extend(servers, { "bicep", "roslyn_ls" })
+-- Servers that only make sense when their toolchain is installed.
+local toolchain_servers = {
+    dotnet = { "bicep", "roslyn_ls" },
+}
+for bin, extra in pairs(toolchain_servers) do
+    if vim.fn.executable(bin) == 1 then
+        vim.list_extend(servers, extra)
+    end
 end
 
 local function helm_ft(filetype)
@@ -206,6 +213,13 @@ local function helm_ft(filetype)
 end
 
 vim.filetype.add({
+    extension = {
+        -- Terraform templatefile() templates: composite <base>.tftpl filetype.
+        tftpl = function(path)
+            local base = vim.filetype.match({ filename = (path or ""):gsub("%.tftpl$", "") })
+            return base and (base .. ".tftpl") or "terraform"
+        end,
+    },
     filename = {
         [".bash_local"] = "bash",
     },
@@ -224,6 +238,39 @@ require("mason-lspconfig").setup({
     automatic_enable = false,
 })
 
+-- Some servers (notably roslyn_ls) embed HTML entities such as "&nbsp;" in hover
+-- markdown, which Nvim renders literally. Decode them before the popup opens.
+local html_entities = {
+    nbsp = " ",
+    lt = "<",
+    gt = ">",
+    amp = "&",
+    quot = '"',
+    apos = "'",
+}
+local function decode_entities(line)
+    local decoded = line:gsub("&(%a+);", html_entities)
+    decoded = decoded:gsub("&#(%d+);", function(n)
+        return vim.fn.nr2char(tonumber(n))
+    end)
+    return (decoded:gsub("&#x(%x+);", function(n)
+        return vim.fn.nr2char(tonumber(n, 16))
+    end))
+end
+local open_floating_preview = vim.lsp.util.open_floating_preview
+vim.lsp.util.open_floating_preview = function(contents, syntax, opts)
+    -- Only markdown hover/help carries entities; leave plaintext (diagnostics) alone.
+    if syntax == "markdown" then
+        contents = vim.tbl_map(function(line)
+            if type(line) == "string" then
+                return decode_entities(line)
+            end
+            return line
+        end, contents)
+    end
+    return open_floating_preview(contents, syntax, opts)
+end
+
 -- Per-server overrides live in after/lsp/<server>.lua.
 vim.lsp.enable(servers)
 
@@ -241,7 +288,8 @@ vim.api.nvim_create_autocmd("LspAttach", {
         end
 
         lsp_map("K", function()
-            vim.lsp.buf.hover({ max_width = 80, max_height = 20 })
+            -- Cap at half the screen: short docs show fully, huge docs stay scrollable.
+            vim.lsp.buf.hover({ max_width = 100, max_height = math.floor(vim.o.lines * 0.5) })
         end, "Hover")
         lsp_map("gd", vim.lsp.buf.definition, "Go to definition")
         lsp_map("<leader>ld", vim.diagnostic.open_float, "Line diagnostics")
@@ -289,6 +337,9 @@ require("telescope").setup({
 -- ==========================================
 -- File explorer
 map("n", "<leader>pv", vim.cmd.Ex, { desc = "File explorer" })
+
+-- Ctrl+click opens the link under the mouse instead of jumping to a tag.
+map("n", "<C-LeftMouse>", "<LeftMouse>gx", { remap = true, desc = "Open link under mouse" })
 
 -- Files and search
 map("n", "<leader>ff", builtin.find_files, {

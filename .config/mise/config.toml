@@ -1,7 +1,8 @@
 [tools]
 node = "26"
 go = "1.26"
-uv = "0.13.5"
+uv = "0.13"
+shellcheck = "0.11"
 
 [settings]
 disable_tools = ["python"] # use system python outside of projects

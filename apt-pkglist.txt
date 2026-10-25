@@ -7,3 +7,9 @@ ripgrep
 gcc
 cmake
 build-essential
+git
+wl-clipboard
+curl
+unzip
+shfmt
+tealdeer

@@ -35,7 +35,7 @@
 
 [alias]
     lg = log --graph --pretty=tformat:'%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
-    gone = ! git fetch && git for-each-ref refs/heads --format='%(if:equals=[gone])%(upstream:track)%(then)%(refname:short)%(end)' | xargs -r -n 1 git branch -d
+    gone = ! git fetch && git for-each-ref refs/heads --format='%(if:equals=[gone])%(upstream:track)%(then)%(refname:short)%(end)' | xargs -r -n 1 git branch -D
 
 # Per-machine overrides, untracked
 [include]

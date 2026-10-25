@@ -22,7 +22,7 @@ export VISUAL="nvim"
 export GOPATH="$HOME/.go"
 export CARGO_HOME="$HOME/.cargo"
 # Prepend once so nested shells don't duplicate entries; last listed wins.
-for dir in "$CARGO_HOME/bin" "$GOPATH/bin" "$HOME/bin" "$HOME/.local/bin"; do
+for dir in "$CARGO_HOME/bin" "$GOPATH/bin" "$HOME/.local/bin"; do
   case ":$PATH:" in
     *":$dir:"*) ;;
     *) PATH="$dir:$PATH" ;;

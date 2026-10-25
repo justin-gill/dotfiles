@@ -17,7 +17,6 @@ fzf
 ghostty
 git
 gnome-themes-extra
-go
 go-yq
 hyprland
 jq
@@ -45,9 +44,11 @@ reflector
 ripgrep
 rtkit
 rustup
+shfmt
 sof-firmware
 stow
 tailscale
+tealdeer
 thunar
 thunar-archive-plugin
 tmux
