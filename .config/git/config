@@ -1,8 +1,3 @@
-# Base git config (tracked) -- shared defaults for every machine.
-# Two levels, lowest precedence first:
-#   1. this file     -- shared defaults, tracked in the dotfiles repo
-#   2. config.local  -- per-machine overrides, untracked (git-ignored)
-
 [core]
     autocrlf = input
 
@@ -18,6 +13,17 @@
 [fetch]
     prune = true
 
+[diff]
+    algorithm = histogram
+    colorMoved = default
+
+[rebase]
+    autoStash = true
+    updateRefs = true
+
+[branch]
+    sort = -committerdate
+
 [merge]
     conflictStyle = zdiff3
 
@@ -29,7 +35,8 @@
 
 [alias]
     lg = log --graph --pretty=tformat:'%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
-    gone = ! git fetch && git for-each-ref refs/heads --format='%(if:equals=[gone])%(upstream:track)%(then)%(refname:short)%(end)' | xargs -r -n 1 git branch -D
+    gone = ! git fetch && git for-each-ref refs/heads --format='%(if:equals=[gone])%(upstream:track)%(then)%(refname:short)%(end)' | xargs -r -n 1 git branch -d
 
+# Per-machine overrides, untracked
 [include]
     path = config.local

@@ -19,10 +19,17 @@ fi
 export BROWSER="firefox"
 export EDITOR="nvim"
 export VISUAL="nvim"
-export QT_STYLE_OVERRIDE="Adwaita-Dark"
 export GOPATH="$HOME/.go"
 export CARGO_HOME="$HOME/.cargo"
-export PATH="$HOME/.local/bin:$HOME/bin:$GOPATH/bin:$CARGO_HOME/bin:$PATH"
+# Prepend once so nested shells don't duplicate entries; last listed wins.
+for dir in "$CARGO_HOME/bin" "$GOPATH/bin" "$HOME/bin" "$HOME/.local/bin"; do
+  case ":$PATH:" in
+    *":$dir:"*) ;;
+    *) PATH="$dir:$PATH" ;;
+  esac
+done
+unset dir
+export PATH
 
 export NEWT_COLORS='
   root=,#1e1e2e; window=#cdd6f4,#181825; shadow=#1e1e2e,#1e1e2e;
@@ -38,7 +45,10 @@ shopt -s histappend
 export HISTSIZE=10000
 export HISTFILESIZE=20000
 export HISTCONTROL=ignoreboth
-export PROMPT_COMMAND="history -a; ${PROMPT_COMMAND:-}"
+case ";${PROMPT_COMMAND:-};" in
+  *"history -a"*) ;;
+  *) PROMPT_COMMAND="history -a${PROMPT_COMMAND:+; $PROMPT_COMMAND}" ;;
+esac
 
 # Prompt
 LIGHT_BLUE="\[\e[38;5;153m\]"
@@ -46,7 +56,6 @@ PEACH="\[\e[38;5;174m\]"
 LIGHT_GREEN="\[\e[38;5;151m\]"
 RESET="\[\e[0m\]"
 
-# Git branch/state in the prompt, from git's shipped prompt helper.
 if [ -f /usr/share/git/completion/git-prompt.sh ]; then
   . /usr/share/git/completion/git-prompt.sh
 elif [ -f /usr/lib/git-core/git-sh-prompt ]; then
@@ -61,8 +70,6 @@ if [ -x /usr/bin/dircolors ]; then
   test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
   alias ls='ls --color=auto'
   alias grep='grep --color=auto'
-  alias fgrep='fgrep --color=auto'
-  alias egrep='egrep --color=auto'
 fi
 
 alias ll='ls -alF'

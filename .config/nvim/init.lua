@@ -33,29 +33,29 @@ opt.clipboard:append("unnamedplus")
 -- Packages
 -- ==========================================
 local plugins = {
-    "https://github.com/lewis6991/gitsigns.nvim",
-    "https://github.com/nvim-lua/plenary.nvim",
-    "https://github.com/nvim-telescope/telescope.nvim",
-    "https://github.com/christoomey/vim-tmux-navigator",
+    -- UI
     { src = "https://github.com/catppuccin/nvim", name = "catppuccin" },
     "https://github.com/nvim-tree/nvim-web-devicons",
     "https://github.com/nvim-lualine/lualine.nvim",
+    "https://github.com/lewis6991/gitsigns.nvim",
+
+    -- Navigation and search
+    "https://github.com/nvim-lua/plenary.nvim",
+    "https://github.com/nvim-telescope/telescope.nvim",
+    "https://github.com/christoomey/vim-tmux-navigator",
+
+    -- Syntax and LSP
     { src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "main" },
     "https://github.com/neovim/nvim-lspconfig",
-    "https://github.com/williamboman/mason-lspconfig.nvim",
-    "https://github.com/williamboman/mason.nvim",
+    "https://github.com/mason-org/mason.nvim",
+    "https://github.com/mason-org/mason-lspconfig.nvim",
 }
 
--- Disable vim-tmux-navigator's default mappings; the described versions in
--- the keymaps section are the only ones defined. Must be set before
--- vim.pack.add(), which sources the plugin.
+-- Must be set before vim.pack.add() sources the plugin.
 vim.g.tmux_navigator_no_mappings = 1
 
 vim.pack.add(plugins)
 
--- Split installed packages into active (added this session) and stale (left
--- on disk after removal from `plugins`). Nothing here lazy-loads, so stale
--- always means "removed from the plugin list".
 ---@return string[] active, string[] stale
 local function pack_status()
     local active, stale = {}, {}
@@ -68,9 +68,7 @@ local function pack_status()
     return active, stale
 end
 
--- Nvim 0.13 adds built-in `:packupdate[!]` and `:packdel ++all`; delete both
--- custom commands then. A package removed from `plugins` this session is
--- still active until restart, so run PackClean after restarting.
+-- TODO: Nvim 0.13 adds `:packupdate` and `:packdel ++all`; drop these commands then.
 local function pack_clean(bang)
     local _, stale = pack_status()
 
@@ -94,13 +92,10 @@ local function pack_clean(bang)
     vim.pack.del(stale)
 end
 
--- `:PackClean` asks for confirmation; `:PackClean!` deletes immediately.
 vim.api.nvim_create_user_command("PackClean", function(opts)
     pack_clean(opts.bang)
 end, { bang = true, desc = "Delete packages left on disk after removal from the plugin list" })
 
--- `:PackUpdate` updates every package; `:PackUpdate name...` updates a
--- subset. `:PackUpdate!` skips the confirmation buffer.
 vim.api.nvim_create_user_command("PackUpdate", function(opts)
     vim.pack.update(#opts.fargs > 0 and opts.fargs or nil, { force = opts.bang })
 end, {
@@ -173,14 +168,13 @@ if #missing_parsers > 0 then
     require("nvim-treesitter").install(missing_parsers)
 end
 
--- Enable native Tree-sitter highlighting and indentation per filetype.
+-- Only override indentexpr when a parser started.
 vim.api.nvim_create_autocmd("FileType", {
     pattern = "*",
     callback = function()
-        pcall(vim.treesitter.start)
-        pcall(function()
+        if pcall(vim.treesitter.start) then
             vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-        end)
+        end
     end,
 })
 
@@ -189,21 +183,22 @@ vim.api.nvim_create_autocmd("FileType", {
 -- ==========================================
 local servers = {
     "bashls",
-    "bicep",
     "gopls",
     "helm_ls",
-    "lua_ls", -- editing this config
-    "roslyn_ls", -- C#
+    "lua_ls",
     "ruff",
     "rust_analyzer",
-    "stylua", -- Lua formatting
     "terraformls",
     "ts_ls",
     "ty",
-    "yamlls", -- Helm values, Kubernetes manifests
+    "yamlls",
 }
 
--- Assign the filetype only when the path belongs to a Helm chart.
+-- dotnet comes from the work laptop's .mise.local.toml.
+if vim.fn.executable("dotnet") == 1 then
+    vim.list_extend(servers, { "bicep", "roslyn_ls" })
+end
+
 local function helm_ft(filetype)
     return function(path)
         return vim.fs.root(path, "Chart.yaml") ~= nil and filetype or nil
@@ -223,16 +218,13 @@ vim.filetype.add({
 })
 
 require("mason").setup()
--- `servers` is the single source of truth. mason-lspconfig's default
--- `automatic_enable = true` would also start every other installed server
--- (basedpyright, ...) regardless of that list.
+-- Only start `servers`, not every server Mason has installed.
 require("mason-lspconfig").setup({
     ensure_installed = servers,
     automatic_enable = false,
 })
 
--- Per-server overrides live in after/lsp/<server>.lua, which merges after
--- nvim-lspconfig's own lsp/ configs. init.lua stays server-agnostic.
+-- Per-server overrides live in after/lsp/<server>.lua.
 vim.lsp.enable(servers)
 
 vim.api.nvim_create_autocmd("LspAttach", {
@@ -242,10 +234,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
         if client and client:supports_method("textDocument/completion") then
             vim.lsp.completion.enable(true, client.id, bufnr, { autotrigger = true })
-        end
-
-        if client and client:supports_method("textDocument/codeLens") then
-            vim.lsp.codelens.enable(true, { bufnr = bufnr })
         end
 
         local function lsp_map(lhs, rhs, desc)
@@ -302,7 +290,7 @@ require("telescope").setup({
 -- File explorer
 map("n", "<leader>pv", vim.cmd.Ex, { desc = "File explorer" })
 
--- Files and search (LazyVim convention)
+-- Files and search
 map("n", "<leader>ff", builtin.find_files, {
     desc = "Find files (incl. dotfiles, respects .gitignore)",
 })
@@ -313,7 +301,7 @@ map("n", "<leader>fb", builtin.buffers, { desc = "Buffers" })
 map("n", "<leader>fh", builtin.help_tags, { desc = "Help tags" })
 map("n", "<leader>lD", builtin.diagnostics, { desc = "All diagnostics" })
 
--- Window navigation through tmux.
+-- Window navigation through tmux
 map("n", "<C-h>", "<cmd>TmuxNavigateLeft<cr>", { desc = "Tmux: navigate left" })
 map("n", "<C-j>", "<cmd>TmuxNavigateDown<cr>", { desc = "Tmux: navigate down" })
 map("n", "<C-k>", "<cmd>TmuxNavigateUp<cr>", { desc = "Tmux: navigate up" })
@@ -331,13 +319,12 @@ vim.api.nvim_create_autocmd("FileType", {
 map("x", "<C-_>", "gc", { remap = true, desc = "Toggle comment" })
 map("n", "<C-_>", "gcc", { remap = true, desc = "Toggle comment" })
 
--- Completion: open the LSP menu with C-n, accept with Enter.
+-- Completion
 map("i", "<C-n>", function()
     return vim.fn.pumvisible() == 1 and "<C-n>" or "<C-x><C-o>"
 end, { expr = true, desc = "Trigger LSP completion" })
 
--- With noselect, Enter must only complete when an item is actually selected;
--- accepting with nothing selected would swallow the newline.
+-- Enter only accepts a selected item; otherwise it would swallow the newline.
 map("i", "<CR>", function()
     return (vim.fn.pumvisible() == 1 and vim.fn.complete_info().selected ~= -1) and "<C-y>" or "<CR>"
 end, { expr = true, desc = "Accept selected completion with Enter" })

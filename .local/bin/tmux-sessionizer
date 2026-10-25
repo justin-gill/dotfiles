@@ -1,6 +1,5 @@
 #!/bin/bash
 # Thanks https://github.com/ThePrimeagen/.dotfiles!
-#
 additional_dirs=(
     "$HOME/.dotfiles"
     "$HOME"
@@ -10,6 +9,7 @@ base_dirs=("$HOME/repos")
 
 all_dirs=()
 for base_dir in "${base_dirs[@]}"; do
+    [[ -d $base_dir ]] || continue
     mapfile -t dirs < <(find "$base_dir" -mindepth 1 -maxdepth 1 -type d)
     all_dirs+=("${dirs[@]}")
 done
@@ -19,7 +19,12 @@ all_dirs+=("${additional_dirs[@]}")
 if [[ $# -eq 1 ]]; then
     selected="$1"
 else
-    selected=$(printf '%s\n' "${all_dirs[@]}" | fzf)
+    # Show $HOME as ~ in the list, then expand it back
+    selected=$(printf '%s\n' "${all_dirs[@]}" | sed "s|^$HOME|~|" | fzf \
+        --reverse --info=inline-right --no-scrollbar --prompt='❯ ' --pointer='▌' \
+        --color='bg+:#313244,fg:#cdd6f4,fg+:#cdd6f4,hl:#f38ba8,hl+:#f38ba8' \
+        --color='prompt:#cba6f7,pointer:#89b4fa,info:#6c7086')
+    selected=${selected/#\~/$HOME}
 fi
 
 if [[ -z $selected ]]; then
@@ -27,22 +32,15 @@ if [[ -z $selected ]]; then
 fi
 
 selected_name=$(basename "$selected" | tr . _)
-existing_session=$(tmux list-sessions | grep -c "^$selected_name:")
 
-if [[ -z $TMUX && -z $(pgrep tmux) ]]; then
-    tmux new-session -s "$selected_name" -c "$selected"
-    exit 0
-elif [[ -z $TMUX && $existing_session -eq 1 ]]; then
-    tmux attach-session -t "$selected_name"
-    exit 0
-elif [[ -z $TMUX ]]; then
-    tmux new-session -s "$selected_name" -c "$selected"
-    exit 0
-fi
-
-if [[ $TMUX && $existing_session -eq 0 ]]; then
+# "=" matches the session name exactly, not as a prefix
+if ! tmux has-session -t "=$selected_name" 2>/dev/null; then
     tmux new-session -ds "$selected_name" -c "$selected"
 fi
 
-tmux switch-client -t "$selected_name"
+if [[ -z $TMUX ]]; then
+    tmux attach-session -t "=$selected_name"
+else
+    tmux switch-client -t "=$selected_name"
+fi
 

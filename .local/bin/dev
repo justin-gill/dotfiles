@@ -1,12 +1,17 @@
 #!/usr/bin/env bash
-# Spare shell in the right pane, 25% width
-tmux split-window -h -l "$(( $(tmux display -p '#{pane_width}') * 25 / 100 ))"
+# nvim top-left, shell bottom-left (20% height), spare shell right (25% width)
+if [[ -z $TMUX ]]; then
+    echo "dev: must be run inside tmux" >&2
+    exit 1
+fi
 
-# Split the left pane, reserving a bottom pane at 1/5 height
-tmux select-pane -L
-tmux split-window -v -l "$(( $(tmux display -p '#{pane_height}') / 5 ))"
+editor=$(tmux display -p '#{pane_id}')
+right=$(tmux split-window -h -l 25% -P -F '#{pane_id}')
+bottom=$(tmux split-window -v -l 20% -t "$editor" -P -F '#{pane_id}')
 
-# Start nvim in the top-left pane, then leave focus on the bottom-left pane
-tmux select-pane -U \; send-keys 'nvim' C-m
-tmux select-pane -R \;
-tmux select-pane -L \; select-pane -D
+# tmux spreads resizes evenly across panes, so re-apply the ratios (errors ignored for closed panes)
+tmux set-hook -w window-resized \
+    "run-shell -b 'tmux resize-pane -t $right -x 25% 2>/dev/null; tmux resize-pane -t $bottom -y 20% 2>/dev/null; true'"
+
+tmux send-keys -t "$editor" 'nvim' C-m
+tmux select-pane -t "$bottom"

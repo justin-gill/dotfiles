@@ -17,8 +17,9 @@ confirm-close-surface = false
 mouse-scroll-multiplier = 1
 mouse-hide-while-typing = true
 mouse-shift-capture = true
-clipboard-read = allow
+clipboard-read = ask
 clipboard-write = allow
 copy-on-select = true
 
-shell-integration = none
+shell-integration = bash
+shell-integration-features = ssh-terminfo,ssh-env

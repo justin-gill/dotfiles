@@ -8,7 +8,7 @@ order = [ "main" ]
     background_opacity = 0.7
     center = [ "clock" ]
     enabled = true
-    end = [ "tray", "clipboard", "network", "bluetooth", "volume", "brightness", "battery", "notifications", "session" ]
+    end = [ "tailscale", "tray", "clipboard", "network", "bluetooth", "volume", "brightness", "battery", "notifications", "session" ]
     font_family = "Adwaita Sans"
     font_scale = 1.0
     font_weight = 500
@@ -118,10 +118,18 @@ wallpaper_scheme = "m3-tonal-spot"
 [weather]
 unit = "imperial"
 
+[plugins]
+enabled = [ "davemhammer/tailscale" ]
+
+[plugin_settings."davemhammer/tailscale"]
+notify_on_peer_change = false
+
+[widget.tailscale]
+type = "davemhammer/tailscale:status"
+
 [widget.clock]
 format = "{:%-I:%M:%S %p}"
 
-# Suppress the OSD popup shown on MPRIS playback / track changes
-# (the "notification" that appears every time a new song or video starts).
+# No OSD popup every time a new song or video starts
 [osd.kinds]
 media = false

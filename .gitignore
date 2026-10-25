@@ -3,14 +3,6 @@
 .config/nvim/schemas
 .config/tmux/plugins
 .config/git/config.local
-.local/bin/mise
-.local/share/
-.local/state/
-# Ignore everything under Pictures; only the .placeholder markers stay tracked.
-# The directory re-include is required so git can descend to the placeholders.
-Pictures/**
-!Pictures/**/
-!Pictures/**/.placeholder
 
 # Machine-local mise overrides
 .config/mise/mise.local.toml

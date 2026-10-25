@@ -11,11 +11,12 @@ hl.workspace_rule({ workspace = "4", monitor = "desc:Acer Technologies Acer V277
 
 hl.on("hyprland.start", function()
     hl.exec_cmd("noctalia")
-    hl.exec_cmd("udiskie &")
+    hl.exec_cmd("udiskie")
 end)
 
 hl.env("XCURSOR_SIZE", 24)
 hl.env("GDK_SCALE", 1)
+hl.env("QT_QPA_PLATFORMTHEME", "gtk3") -- Qt apps follow the GTK (Adwaita-dark) theme
 
 hl.config({
     misc = { disable_hyprland_logo = true, disable_splash_rendering = true },
@@ -62,11 +63,11 @@ bind(mod .. " + SHIFT + L", hl.dsp.exec_cmd(ipc .. "session lock"))
 bind("CTRL + SHIFT + S", hl.dsp.exec_cmd(ipc .. "screenshot-region"))
 
 -- Media keys
-bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd(ipc .. "volume-up"))
-bind("XF86AudioLowerVolume", hl.dsp.exec_cmd(ipc .. "volume-down"))
-bind("XF86AudioMute", hl.dsp.exec_cmd(ipc .. "volume-mute"))
-bind("XF86MonBrightnessUp", hl.dsp.exec_cmd(ipc .. "brightness-up"))
-bind("XF86MonBrightnessDown", hl.dsp.exec_cmd(ipc .. "brightness-down"))
+bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd(ipc .. "volume-up"), { locked = true, repeating = true })
+bind("XF86AudioLowerVolume", hl.dsp.exec_cmd(ipc .. "volume-down"), { locked = true, repeating = true })
+bind("XF86AudioMute", hl.dsp.exec_cmd(ipc .. "volume-mute"), { locked = true })
+bind("XF86MonBrightnessUp", hl.dsp.exec_cmd(ipc .. "brightness-up"), { locked = true, repeating = true })
+bind("XF86MonBrightnessDown", hl.dsp.exec_cmd(ipc .. "brightness-down"), { locked = true, repeating = true })
 
 -- Noctalia Settings
 hl.window_rule({
