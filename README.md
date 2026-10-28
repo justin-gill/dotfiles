@@ -1,6 +1,8 @@
 # Dotfiles
 My Arch Linux setup, managed with [GNU Stow](https://www.gnu.org/software/stow/).
 
+![Desktop screenshot](assets/screenshot.png)
+
 * **Desktop:** [Hyprland](https://hypr.land/) with [Noctalia](https://docs.noctalia.dev/) for the bar, launcher, and lock screen
 * **Terminal:** [Ghostty](https://ghostty.org/) + tmux
 * **Editor:** Neovim 0.12, using the built-in `vim.pack`

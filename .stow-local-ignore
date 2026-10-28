@@ -11,3 +11,4 @@ flatpaks.txt
 corne-v4-layout.vil
 ^/\.local/(share|state|lib|include)
 .luarc.json
+^/assets
