@@ -10,6 +10,8 @@ enable-animations=false
 gtk-theme='Yaru-dark'
 icon-theme='Yaru'
 monospace-font-name='literationmono nerd font 13'
+clock-show-seconds=true
+show-battery-percentage=true
 
 [org/gnome/desktop/peripherals/touchpad]
 two-finger-scrolling-enabled=true
@@ -55,7 +57,12 @@ night-light-schedule-to=0.0
 
 [org/gnome/settings-daemon/plugins/media-keys]
 search=['<alt>space']
-terminal=['<alt>return']
+custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/']
+
+[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0]
+binding='<Alt><Return>'
+command='/usr/bin/ghostty'
+name='ghostty'
 
 [org/gnome/settings-daemon/plugins/power]
 sleep-inactive-ac-timeout=3600
@@ -65,3 +72,6 @@ sleep-inactive-ac-type='nothing'
 dock-fixed=false
 extend-height=false
 show-trash=false
+
+[org/gnome/shell/keybindings]
+show-screenshot-ui=['<Shift><Control>s']

@@ -49,6 +49,7 @@ widget_order = []
 pre_action_fade_seconds = 0
 
 [lockscreen]
+lock_before_suspend = false
 transition = []
 
 [lockscreen_widgets]
