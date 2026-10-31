@@ -366,9 +366,11 @@ vim.api.nvim_create_autocmd("FileType", {
     end,
 })
 
--- Comments
-map("x", "<C-_>", "gc", { remap = true, desc = "Toggle comment" })
-map("n", "<C-_>", "gcc", { remap = true, desc = "Toggle comment" })
+-- Comments (<C-/> with extended keys, <C-_> on legacy terminals)
+for _, lhs in ipairs({ "<C-/>", "<C-_>" }) do
+    map("x", lhs, "gc", { remap = true, desc = "Toggle comment" })
+    map("n", lhs, "gcc", { remap = true, desc = "Toggle comment" })
+end
 
 -- Completion
 map("i", "<C-n>", function()
