@@ -6,7 +6,6 @@ vim.g.mapleader = " "
 local opt = vim.opt
 local map = vim.keymap.set
 
--- UI
 opt.signcolumn = "yes"
 opt.laststatus = 3
 opt.winborder = "rounded"
@@ -15,22 +14,19 @@ opt.number = true
 opt.relativenumber = true
 opt.scrolloff = 4
 
--- Editing
 opt.tabstop = 4
 opt.shiftwidth = 4
 opt.expandtab = true
 opt.undofile = true
+opt.clipboard:append("unnamedplus")
 
--- Search
 opt.ignorecase = true
 opt.smartcase = true
 
--- Completion
 opt.completeopt = { "menu", "menuone", "noselect", "fuzzy" }
-opt.clipboard:append("unnamedplus")
 
 -- ==========================================
--- Packages
+-- Plugins
 -- ==========================================
 local plugins = {
     -- UI
@@ -56,6 +52,9 @@ vim.g.tmux_navigator_no_mappings = 1
 
 vim.pack.add(plugins)
 
+-- ==========================================
+-- Plugin commands
+-- ==========================================
 ---@return string[] active, string[] stale
 local function pack_status()
     local active, stale = {}, {}
@@ -110,11 +109,17 @@ end, {
     end,
 })
 
-local builtin = require("telescope.builtin")
-
 -- ==========================================
 -- UI
 -- ==========================================
+require("catppuccin").setup({
+    custom_highlights = function(colors)
+        local U = require("catppuccin.utils.colors")
+        return {
+            YankHighlight = { bg = U.blend(colors.lavender, colors.base, 0.3) },
+        }
+    end,
+})
 vim.cmd.colorscheme("catppuccin-mocha")
 
 require("lualine").setup({
@@ -133,79 +138,15 @@ require("lualine").setup({
     },
 })
 
--- ==========================================
--- Treesitter
--- ==========================================
--- Parser installation requires the tree-sitter CLI.
-local parsers = {
-    "bash",
-    "bicep",
-    "c_sharp",
-    "go",
-    "gomod",
-    "gosum",
-    "gotmpl",
-    "helm",
-    "json",
-    "lua",
-    "python",
-    "rust",
-    "terraform",
-    "tsx",
-    "typescript",
-    "vim",
-    "vimdoc",
-    "yaml",
-}
-local installed_parsers = require("nvim-treesitter.config").get_installed()
-local missing_parsers = vim.iter(parsers)
-    :filter(function(parser)
-        return not vim.tbl_contains(installed_parsers, parser)
-    end)
-    :totable()
-
-if #missing_parsers > 0 then
-    require("nvim-treesitter").install(missing_parsers)
-end
-
--- Only override indentexpr when a parser started.
-vim.api.nvim_create_autocmd("FileType", {
-    pattern = "*",
+vim.api.nvim_create_autocmd("TextYankPost", {
     callback = function()
-        -- tftpl buffers use regex syntax; a treesitter parser would flood errors.
-        if vim.bo.filetype:find(".tftpl", 1, true) then return end
-        if pcall(vim.treesitter.start) then
-            vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-        end
+        vim.hl.on_yank({ higroup = "YankHighlight" })
     end,
 })
 
 -- ==========================================
--- LSP
+-- Filetypes
 -- ==========================================
-local servers = {
-    "bashls",
-    "gopls",
-    "helm_ls",
-    "lua_ls",
-    "ruff",
-    "rust_analyzer",
-    "terraformls",
-    "ts_ls",
-    "ty",
-    "yamlls",
-}
-
--- Servers that only make sense when their toolchain is installed.
-local toolchain_servers = {
-    dotnet = { "bicep", "roslyn_ls" },
-}
-for bin, extra in pairs(toolchain_servers) do
-    if vim.fn.executable(bin) == 1 then
-        vim.list_extend(servers, extra)
-    end
-end
-
 local function helm_ft(filetype)
     return function(path)
         return vim.fs.root(path, "Chart.yaml") ~= nil and filetype or nil
@@ -230,6 +171,109 @@ vim.filetype.add({
         [".*%.bashrc"] = "bash",
     },
 })
+
+-- ==========================================
+-- Treesitter
+-- ==========================================
+local parsers = {
+    "bash",
+    "bicep",
+    "c_sharp",
+    "diff",
+    "dockerfile",
+    "gitcommit",
+    "go",
+    "gomod",
+    "gosum",
+    "gotmpl",
+    "helm",
+    "javascript",
+    "json",
+    "lua",
+    "make",
+    "python",
+    "rust",
+    "terraform",
+    "toml",
+    "tsx",
+    "typescript",
+    "vim",
+    "vimdoc",
+    "yaml",
+}
+local installed_parsers = require("nvim-treesitter.config").get_installed()
+local missing_parsers = vim.iter(parsers)
+    :filter(function(parser)
+        return not vim.tbl_contains(installed_parsers, parser)
+    end)
+    :totable()
+
+if #missing_parsers > 0 then
+    require("nvim-treesitter").install(missing_parsers)
+end
+
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "*",
+    callback = function()
+        -- tftpl buffers use regex syntax; a treesitter parser would flood errors.
+        if vim.bo.filetype:find(".tftpl", 1, true) then
+            return
+        end
+        if pcall(vim.treesitter.start) then
+            vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+        end
+    end,
+})
+
+-- ==========================================
+-- Telescope
+-- ==========================================
+local builtin = require("telescope.builtin")
+local rg_hidden_args = { "--hidden", "--glob", "!**/.git/**" }
+
+require("telescope").setup({
+    pickers = {
+        find_files = {
+            find_command = vim.list_extend({ "rg", "--files", "--color=never" }, rg_hidden_args),
+        },
+        live_grep = {
+            vimgrep_arguments = vim.list_extend({
+                "rg",
+                "--color=never",
+                "--no-heading",
+                "--with-filename",
+                "--line-number",
+                "--column",
+                "--smart-case",
+            }, rg_hidden_args),
+        },
+    },
+})
+
+-- ==========================================
+-- LSP
+-- ==========================================
+local servers = {
+    "bashls",
+    "gopls",
+    "helm_ls",
+    "lua_ls",
+    "ruff",
+    "rust_analyzer",
+    "terraformls",
+    "ts_ls",
+    "ty",
+    "yamlls",
+}
+
+local toolchain_servers = {
+    dotnet = { "bicep", "roslyn_ls" },
+}
+for bin, extra in pairs(toolchain_servers) do
+    if vim.fn.executable(bin) == 1 then
+        vim.list_extend(servers, extra)
+    end
+end
 
 require("mason").setup()
 -- Only start `servers`, not every server Mason has installed.
@@ -288,7 +332,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
         end
 
         lsp_map("K", function()
-            -- Cap at half the screen: short docs show fully, huge docs stay scrollable.
             vim.lsp.buf.hover({ max_width = 100, max_height = math.floor(vim.o.lines * 0.5) })
         end, "Hover")
         lsp_map("gd", vim.lsp.buf.definition, "Go to definition")
@@ -309,50 +352,17 @@ vim.api.nvim_create_autocmd("LspAttach", {
 })
 
 -- ==========================================
--- Telescope
--- ==========================================
-local rg_hidden_args = { "--hidden", "--glob", "!**/.git/**" }
-
-require("telescope").setup({
-    pickers = {
-        find_files = {
-            find_command = vim.list_extend({ "rg", "--files", "--color=never" }, rg_hidden_args),
-        },
-        live_grep = {
-            vimgrep_arguments = vim.list_extend({
-                "rg",
-                "--color=never",
-                "--no-heading",
-                "--with-filename",
-                "--line-number",
-                "--column",
-                "--smart-case",
-            }, rg_hidden_args),
-        },
-    },
-})
-
--- ==========================================
 -- Keymaps
 -- ==========================================
--- File explorer
 map("n", "<leader>pv", vim.cmd.Ex, { desc = "File explorer" })
-
--- Ctrl+click opens the link under the mouse instead of jumping to a tag.
 map("n", "<C-LeftMouse>", "<LeftMouse>gx", { remap = true, desc = "Open link under mouse" })
 
--- Files and search
-map("n", "<leader>ff", builtin.find_files, {
-    desc = "Find files (incl. dotfiles, respects .gitignore)",
-})
-map("n", "<leader>fg", builtin.live_grep, {
-    desc = "Live grep (incl. dotfiles, respects .gitignore)",
-})
+map("n", "<leader>ff", builtin.find_files, { desc = "Find files (incl. dotfiles, respects .gitignore)" })
+map("n", "<leader>fg", builtin.live_grep, { desc = "Live grep (incl. dotfiles, respects .gitignore)" })
 map("n", "<leader>fb", builtin.buffers, { desc = "Buffers" })
 map("n", "<leader>fh", builtin.help_tags, { desc = "Help tags" })
 map("n", "<leader>lD", builtin.diagnostics, { desc = "All diagnostics" })
 
--- Window navigation through tmux
 map("n", "<C-h>", "<cmd>TmuxNavigateLeft<cr>", { desc = "Tmux: navigate left" })
 map("n", "<C-j>", "<cmd>TmuxNavigateDown<cr>", { desc = "Tmux: navigate down" })
 map("n", "<C-k>", "<cmd>TmuxNavigateUp<cr>", { desc = "Tmux: navigate up" })
@@ -366,13 +376,12 @@ vim.api.nvim_create_autocmd("FileType", {
     end,
 })
 
--- Comments (<C-/> with extended keys, <C-_> on legacy terminals)
+-- <C-/> with extended keys, <C-_> on legacy terminals.
 for _, lhs in ipairs({ "<C-/>", "<C-_>" }) do
     map("x", lhs, "gc", { remap = true, desc = "Toggle comment" })
     map("n", lhs, "gcc", { remap = true, desc = "Toggle comment" })
 end
 
--- Completion
 map("i", "<C-n>", function()
     return vim.fn.pumvisible() == 1 and "<C-n>" or "<C-x><C-o>"
 end, { expr = true, desc = "Trigger LSP completion" })
